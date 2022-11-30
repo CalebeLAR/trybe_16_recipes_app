@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function RecipeDetails(props) {
+  const [dataDetails, setDataDetails] = useState({});
+
   const fetchMealDetails = (idMeal) => {
     // idMeal = '53065';
     const URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`;
     fetch(URL)
       .then((response) => response.json())
-      .then((data) => console.log(data))
+      .then((data) => setDataDetails(data.meals[0]))
       .catch((error) => console.log(error));
-    console.log('fetchMealDetails');
   };
 
   const fetchDrinkDetails = (idDrink) => {
@@ -17,9 +18,8 @@ export default function RecipeDetails(props) {
     const URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idDrink}`;
     fetch(URL)
       .then((response) => response.json())
-      .then((data) => console.log(data))
+      .then((data) => setDataDetails(data.drinks[0]))
       .catch((error) => console.log(error));
-    console.log('fetchDrinkDetails');
   };
 
   const whereDidTheIdComeFrom = () => {
@@ -31,12 +31,14 @@ export default function RecipeDetails(props) {
     if (pathname.includes('drinks')) {
       fetchDrinkDetails(idDaReceita);
     }
+    console.log('whereDidTheIdComeFrom');
   };
 
   useEffect(() => {
     whereDidTheIdComeFrom();
-  });
+  }, []);
 
+  console.log(dataDetails);
   return (
     <main>
       <h1>RecipeDetails</h1>
