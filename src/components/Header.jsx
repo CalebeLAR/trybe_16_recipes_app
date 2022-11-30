@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
+import './Header.css';
 
 export default function Header() {
   const location = useLocation();
@@ -21,20 +22,22 @@ export default function Header() {
   );
 
   return (
-    <div style={ { width: '100vw' } }>
-      <div style={ { display: 'flex', justifyContent: 'space-between' } }>
+    <div>
+      <div className="bar">
         <p data-testid="page-title">
           app
           <strong>receitas</strong>
         </p>
 
-        <div>
+        <div className="bar__icons">
           {/* Verifica a rota da página e retorna os icones adequados  */}
           {location.pathname === '/meals'
             || location.pathname === '/drinks'
             ? (
-              <img
+              <button
                 data-testid="search-top-btn"
+                type="button"
+                className="bar__search-button"
                 src={ searchIcon }
                 alt="search icon"
                 onClick={ () => setIsSearchOpen(!isSearchOpen) }
@@ -54,12 +57,11 @@ export default function Header() {
       </div>
 
       {isSearchOpen && (
-        <div>
+        <div className="search">
           <input
             data-testid="search-input"
             type="search"
             name=""
-            id=""
             placeholder="Search"
           />
 
