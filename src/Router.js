@@ -1,13 +1,13 @@
 import React from 'react';
-import { Switch, BrowserRouter, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Recipes from './pages/Recipes';
-import RecipeDetails from './pages/RecipeDetails';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
-import Profile from './pages/Profile';
-import RecipesInProgress from './pages/RecipesInProgress';
+import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import Profile from './pages/Profile';
+import RecipeDetails from './pages/RecipeDetails';
+import Recipes from './pages/Recipes';
+import RecipesInProgress from './pages/RecipesInProgress';
 
 export default function Router() {
   return (
@@ -25,8 +25,8 @@ export default function Router() {
         <Route path="/profile" component={ Profile } />
         <Route path="/meals" component={ Recipes } />
         <Route path="/drinks" component={ Recipes } />
-        <Route path="*" component={ NotFound } />
         <Route exact path="/" component={ Login } />
+        <Route path="*" component={ NotFound } />
       </Switch>
     </BrowserRouter>
   );
