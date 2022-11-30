@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
 
 export default function Header() {
   const location = useLocation();
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Usei como referencia:
   // https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
@@ -35,6 +37,7 @@ export default function Header() {
                 data-testid="search-top-btn"
                 src={ searchIcon }
                 alt="search icon"
+                onClick={ () => setIsSearchOpen(!isSearchOpen) }
               />
 
             )
@@ -49,6 +52,37 @@ export default function Header() {
           </Link>
         </div>
       </div>
+
+      {isSearchOpen && (
+        <div>
+          <input
+            data-testid="search-input"
+            type="search"
+            name=""
+            id=""
+            placeholder="Search"
+          />
+
+          <div>
+            <label htmlFor="ingredient">
+              <input type="radio" name="" id="ingredient" />
+              Ingredient
+            </label>
+
+            <label htmlFor="name">
+              <input type="radio" name="" id="name" />
+              Name
+            </label>
+
+            <label htmlFor="firstLetter">
+              <input type="radio" name="" id="firstLetter" />
+              First Letter
+            </label>
+          </div>
+
+          <button type="button">SEARCH</button>
+        </div>
+      )}
 
       <div>
         <p data-testid="page-title">
