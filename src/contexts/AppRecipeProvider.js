@@ -1,16 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
 import { requestMeals, requestDrinks } from '../services/requestAPIs';
 import AppRecipeContext from './AppRecipeContext';
 
 export default function Provider({ children }) {
-  // const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [arrMealAPI, setArrMealAPI] = useState([]);
   const [arrDrinkAPI, setArrDrinkAPI] = useState([]);
-  const [mealsOrDrinks, setMealsOrDrinks] = useState('');
-  // console.log(history);
 
   const getRecipes = async () => {
     const meals = await requestMeals();
@@ -27,13 +23,10 @@ export default function Provider({ children }) {
     loading,
     arrMealAPI,
     arrDrinkAPI,
-    mealsOrDrinks,
-    setMealsOrDrinks,
   }), [
     loading,
     arrMealAPI,
     arrDrinkAPI,
-    mealsOrDrinks,
   ]);
 
   return (

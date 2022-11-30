@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppRecipeContext from '../contexts/AppRecipeContext';
+import Loading from './Loading';
 
 export default function RecipeCard() {
   const {
     arrMealAPI,
     arrDrinkAPI,
-    // mealsOrDrinks,
     loading,
   } = useContext(AppRecipeContext);
   const history = useHistory();
 
-  if (loading) return <h2>Assando...</h2>;
+  if (loading) return <Loading />;
   return (
     <div>
       {history.location.pathname === '/meals'
