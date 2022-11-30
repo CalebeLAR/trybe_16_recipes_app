@@ -2,12 +2,13 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import drink from '../images/drinkIcon.svg';
 import food from '../images/mealIcon.svg';
+import './Footer.css';
 
 export default function Footer() {
   const history = useHistory();
 
   return (
-    <div data-testid="footer" style={ { bottom: 0, position: 'fixed' } }>
+    <div data-testid="footer" className="bar__footer">
 
       <input
         type="image"
