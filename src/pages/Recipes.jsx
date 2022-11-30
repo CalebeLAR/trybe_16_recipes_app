@@ -3,8 +3,6 @@ import Header from '../components/Header';
 
 export default function Recipes() {
   return (
-    <fragments>
-      <Header />
-    </fragments>
+    <Header />
   );
 }
