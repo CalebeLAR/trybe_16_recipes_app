@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
 
@@ -19,38 +19,37 @@ export default function Header() {
   );
 
   return (
-    <div>
-      <div>
+    <div style={ { width: '100vw' } }>
+      <div style={ { display: 'flex', justifyContent: 'space-between' } }>
+        <p data-testid="page-title">
+          app
+          <strong>receitas</strong>
+        </p>
 
         <div>
-          <p data-testid="page-title">
-            app
-            <strong>receitas</strong>
-          </p>
-        </div>
-        <div>
-          <div>
-            {/* Verifica a rota da página e retorna os icones adequados  */}
-            {location.pathname === '/meals'
+          {/* Verifica a rota da página e retorna os icones adequados  */}
+          {location.pathname === '/meals'
             || location.pathname === '/drinks'
-              ? (
-                <img
-                  data-testid="search-top-btn"
-                  src={ searchIcon }
-                  alt="search icon"
-                />
+            ? (
+              <img
+                data-testid="search-top-btn"
+                src={ searchIcon }
+                alt="search icon"
+              />
 
-              )
-              : null}
+            )
+            : null}
 
+          <Link to="/profile">
             <img
               data-testid="profile-top-btn"
               src={ profileIcon }
               alt="profile icon"
             />
-          </div>
+          </Link>
         </div>
       </div>
+
       <div>
         <p data-testid="page-title">
           <strong>
