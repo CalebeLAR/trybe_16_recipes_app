@@ -6,7 +6,7 @@ import renderWithRouter from '../helpers/RenderWithRouter';
 
 test('Testa pagina de login', async () => {
   // Este arquivo pode ser modificado ou deletado sem problemas
-  const { history } = renderWithRouter(<App />);
+  renderWithRouter(<App />);
   const emailInput = screen.getByTestId(/email-input/i);
   expect(emailInput).toBeInTheDocument();
   const passwordInput = screen.getByTestId(/password-input/i);
