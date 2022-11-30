@@ -1,29 +1,24 @@
-const arrLength = 12;
+const twelve = 12;
 
-export const requestMeal = async () => {
+export const requestMeals = async () => {
   try {
     const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
-    const newData = data.map((meal, i) => {
-      if (i < arrLength) return meal;
-      return meal;
-    });
+    const newData = data.meals.filter((meal, i) => i < twelve && meal);
+    console.log(newData);
     return newData;
   } catch (error) {
-    throw new Error(error.massage);
+    Error(error.massage);
   }
 };
 
-export const requestDrink = async () => {
+export const requestDrinks = async () => {
   try {
     const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
-    const newData = data.map((drink, i) => {
-      if (i < arrLength) return drink;
-      return drink;
-    });
+    const newData = data.drinks.filter((drink, i) => i < twelve && drink);
     return newData;
   } catch (error) {
-    throw new Error(error.massage);
+    Error(error.massage);
   }
 };

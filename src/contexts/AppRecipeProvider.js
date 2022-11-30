@@ -1,24 +1,37 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
-import { requestDrink, requestMeal } from '../services/requestAPIs';
+import React, { useEffect, useMemo, useState } from 'react';
+import { requestMeals, requestDrinks } from '../services/requestAPIs';
 import AppRecipeContext from './AppRecipeContext';
 
 export default function Provider({ children }) {
-  const [arrMealAPI, setArrMealAPI] = ([]);
-  const [arrDrinkAPI, setArrDrinkAPI] = ([]);
-  const [mealOrDrink, setMealOrDrink] = ('meal');
+  const [loading, setLoading] = useState(true);
+  const [arrMealAPI, setArrMealAPI] = useState([]);
+  const [arrDrinkAPI, setArrDrinkAPI] = useState([]);
+  const [mealOrDrink, setMealOrDrink] = useState('meal');
+
+  const getRecipes = async () => {
+    const meals = await requestMeals();
+    const drinks = await requestDrinks();
+    setArrMealAPI(meals);
+    setArrDrinkAPI(drinks);
+  };
 
   useEffect(() => {
-    setArrMealAPI(requestMeal());
-    setArrDrinkAPI(requestDrink());
+    getRecipes().then(() => setLoading(false));
   }, []);
 
-  const value = (() => ({
+  const value = useMemo(() => ({
+    loading,
     arrMealAPI,
     arrDrinkAPI,
     mealOrDrink,
     setMealOrDrink,
-  }), [arrDrinkAPI, arrDrinkAPI]);
+  }), [
+    loading,
+    arrMealAPI,
+    arrDrinkAPI,
+    mealOrDrink,
+  ]);
 
   return (
     <AppRecipeContext.Provider value={ value }>
