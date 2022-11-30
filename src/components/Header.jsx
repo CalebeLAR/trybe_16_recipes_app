@@ -34,10 +34,10 @@ export default function Header() {
           {location.pathname === '/meals'
             || location.pathname === '/drinks'
             ? (
-              <button
+              <input
                 data-testid="search-top-btn"
-                type="button"
-                className="bar__search-button"
+                type="image"
+                // className="bar__search-button"
                 src={ searchIcon }
                 alt="search icon"
                 onClick={ () => setIsSearchOpen(!isSearchOpen) }
