@@ -13,7 +13,10 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/meals/:id-da-receita/in-progress" component={ RecipesInProgress } />
+        <Route
+          path="/meals/:id-da-receita/in-progress"
+          component={ RecipesInProgress }
+        />
         <Route
           path="/drinks/:id-da-receita/in-progress"
           component={ RecipesInProgress }
@@ -25,8 +28,8 @@ export default function Router() {
         <Route path="/profile" component={ Profile } />
         <Route path="/meals" component={ Recipes } />
         <Route path="/drinks" component={ Recipes } />
-        <Route path="*" component={ NotFound } />
         <Route exact path="/" component={ Login } />
+        <Route path="*" component={ NotFound } />
       </Switch>
     </BrowserRouter>
   );
