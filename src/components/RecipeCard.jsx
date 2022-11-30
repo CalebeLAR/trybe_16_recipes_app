@@ -14,22 +14,23 @@ export default function RecipeCard() {
     <div>
       {mealOrDrink === 'meal'
         ? arrMealAPI.map((recipe, index) => (
-          <div key={ recipe.idMeal }>
-            <h4>{recipe.strMeal}</h4>
+          <div data-testid={ `${index}-recipe-card` } key={ recipe.idMeal }>
+            <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
             <img
-              src="recipe.strMealThumb"
-              alt="recipe.strMeal"
+              style={ { width: '100px' } }
+              src={ recipe.strMealThumb }
+              alt={ recipe.strMeal }
               data-testid={ `${index}-card-img` }
             />
           </div>
         ))
         : (
           arrDrinkAPI.map((recipe, index) => (
-            <div key={ recipe.idDrink }>
-              <h4>{recipe.strDrink}</h4>
+            <div data-testid={ `${index}-recipe-card` } key={ recipe.idDrink }>
+              <p data-testid={ `${index}-card-name` }>{recipe.strDrink}</p>
               <img
-                src="recipe.strDrinkThumb"
-                alt="recipe.strDrink"
+                src={ recipe.strDrinkThumb }
+                alt={ recipe.strDrink }
                 data-testid={ `${index}-card-img` }
               />
             </div>
