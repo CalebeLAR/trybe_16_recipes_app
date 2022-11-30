@@ -5,7 +5,6 @@ export const requestMeals = async () => {
     const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
     const newData = data.meals.filter((meal, i) => i < twelve && meal);
-    console.log(newData);
     return newData;
   } catch (error) {
     Error(error.massage);
