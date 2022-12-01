@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import CarouselRecommendations from '../components/CarouselRecommendations';
 import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
 
@@ -40,25 +41,25 @@ export default function RecipeDetails(props) {
     const URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
     fetch(URL)
       .then((response) => response.json())
-      .then((data) => console.log(data.meals.slice(0, MAX)))
+      .then((data) => setDataRecommendations(data.meals.slice(0, MAX)))
       .catch((error) => console.log(error));
+  };
+  const fetchDetails = () => {
+    // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
+    const { match: { params: { idDaReceita } } } = props;
+    if (pathname.includes('meals')) {
+      fetchMealDetails(idDaReceita);
+      fetchMealsRecommendations();
+    }
+    if (pathname.includes('drinks')) {
+      fetchDrinkDetails(idDaReceita);
+      fetchDrinksRecommendations();
+    }
   };
 
   useEffect(() => {
-    const fetchDetails = () => {
-      // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
-      const { match: { params: { idDaReceita } } } = props;
-      if (pathname.includes('meals')) {
-        fetchMealDetails(idDaReceita);
-        fetchMealsRecommendations();
-      }
-      if (pathname.includes('drinks')) {
-        fetchDrinkDetails(idDaReceita);
-        fetchDrinksRecommendations();
-      }
-    };
     fetchDetails();
-  }, [dataDetails, dataRecommendations, pathname, props]);
+  }, []);
   return (
     <main>
       <h1>RecipeDetails</h1>
@@ -71,8 +72,11 @@ export default function RecipeDetails(props) {
           && <DrinksCard drinkDetails={ dataDetails } />
       }
       {
-        (Object.keys(dataRecommendations).length > 0)
-        && <h1>Recomendação</h1>
+        (dataRecommendations.length > 0)
+        && <CarouselRecommendations
+          dataRecommendations={ dataRecommendations }
+          pathname={ pathname }
+        />
       }
     </main>
   );
