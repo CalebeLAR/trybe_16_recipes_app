@@ -60,6 +60,7 @@ export default function RecipeDetails(props) {
     };
     fetchDetails();
   }, [pathname, props]);
+
   return (
     <main>
       <h1>RecipeDetails</h1>
