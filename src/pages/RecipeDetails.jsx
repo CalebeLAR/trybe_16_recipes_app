@@ -43,22 +43,22 @@ export default function RecipeDetails(props) {
       .then((data) => console.log(data.meals.slice(0, MAX)))
       .catch((error) => console.log(error));
   };
-  const fetchDetails = () => {
-    // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
-    const { match: { params: { idDaReceita } } } = props;
-    if (pathname.includes('meals')) {
-      fetchMealDetails(idDaReceita);
-      fetchMealsRecommendations();
-    }
-    if (pathname.includes('drinks')) {
-      fetchDrinkDetails(idDaReceita);
-      fetchDrinksRecommendations();
-    }
-  };
 
   useEffect(() => {
+    const fetchDetails = () => {
+      // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
+      const { match: { params: { idDaReceita } } } = props;
+      if (pathname.includes('meals')) {
+        fetchMealDetails(idDaReceita);
+        fetchMealsRecommendations();
+      }
+      if (pathname.includes('drinks')) {
+        fetchDrinkDetails(idDaReceita);
+        fetchDrinksRecommendations();
+      }
+    };
     fetchDetails();
-  }, []);
+  }, [dataDetails, dataRecommendations, pathname, props]);
   return (
     <main>
       <h1>RecipeDetails</h1>
