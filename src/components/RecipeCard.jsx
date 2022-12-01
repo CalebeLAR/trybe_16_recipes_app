@@ -17,50 +17,47 @@ export default function RecipeCard() {
   const { location: { pathname } } = history;
   const page = pathname.split('/')[1];
 
-  const [objFilter, setObjFilter] = useState({
+  const objFilterInitial = {
     arrRecipes: page === 'meals' ? arrMealAPI : arrDrinkAPI,
-    filter: '',
-  });
+    filter: 'All',
+  };
 
-  useEffect(() => {
-    setObjFilter({
-      arrRecipes: page === 'meals' ? arrMealAPI : arrDrinkAPI,
-      filter: '',
-    });
-  }, [loading]);
+  const [objFilter, setObjFilter] = useState(objFilterInitial);
+
+  const fetchByFilter = async (search) => {
+    const twelve = 12;
+    const url = (page === 'meals')
+      ? (`https://www.themealdb.com/api/json/v1/1/filter.php?c=${search}`)
+      : (`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${search}`);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const newData = await data[page].filter((_recipe, i) => i < twelve);
+      return newData;
+    } catch (error) {
+      Error(error.massage);
+    }
+  };
 
   const handleClickFilter = async ({ target }) => {
     // setLoading(true);
-    const twelve = 12;
     const search = target.innerText.split(' ').join('_');
-    const url = (page === 'meals')
-      ? (`www.themealdb.com/api/json/v1/1/filter.php?c=${search}`)
-      : (`www.thecocktaildb.com/api/json/v1/1/filter.php?c=${search}`);
-      // try {
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);                             // fazer requisição junto com categorias e manter no estado 
-    const newData = await data[page].filter((recipe, i) => i < twelve && recipe);
-    setObjFilter({ arrRecipes: newData, filter: search });
-    // } catch (error) {
-    //   Error(error.massage);
-    // }
+    if (search === objFilter.filter) {
+      setObjFilter(objFilterInitial);
+    } else if (search !== 'All') {
+      const newData = await fetchByFilter(search);
+      setObjFilter({ arrRecipes: newData, filter: search });
+    } else {
+      setObjFilter(objFilterInitial);
+    }
+    // setLoading(false);
   };
 
   useEffect(() => {
-    console.log(objFilter.arrRecipes);
     if (objFilter.filter === 'All') {
-      setObjFilter({ ...objFilter,
-        arrRecipes: (page === 'meals' ? arrMealAPI : arrDrinkAPI),
-      });
+      setObjFilter(objFilterInitial);
     }
-    // setLoading(false);
-    // else {
-    //   // setObjFilter({ ...objFilter,
-    //   //   arrRecipes: (page === 'meals' ? arrMealAPI : arrDrinkAPI)
-    //   //     .filter((recipe) => recipe.strCategory === objFilter.filter) });
-    // }
-  }, [objFilter.filter]);
+  }, [loading]);
 
   if (loading) return <Loading />;
   return (
@@ -68,8 +65,8 @@ export default function RecipeCard() {
       {(page === 'meals'
         ? arrMealCategAPI
         : arrDrinkCategAPI)
-        .map((categ) => (
-          <div key={ categ }>
+        .map((categ, i) => (
+          <div key={ i }>
             <button
               type="button"
               data-testid={ `${categ}-category-filter` }
@@ -107,6 +104,7 @@ export default function RecipeCard() {
               alt={ recipe.strDrink }
               data-testid={ `${index}-card-img` }
             />
+            {console.log(objFilter.arrRecipes)}
           </div>
         ))}
     </div>
