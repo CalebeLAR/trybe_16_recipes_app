@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import DrinksCard from '../components/DrinksCard';
+import MealsCard from '../components/MealsCard';
 
 export default function RecipeDetails(props) {
-  const [dataDetails, setDataDetails] = useState({});
+  const { history: { location: { pathname } } } = props;
+  const [dataDetails, setDataDetails] = useState(false);
 
   const fetchMealDetails = (idMeal) => {
     // idMeal = '53065';
@@ -24,24 +27,27 @@ export default function RecipeDetails(props) {
 
   const whereDidTheIdComeFrom = () => {
     const { match: { params: { idDaReceita } } } = props;
-    const { history: { location: { pathname } } } = props;
     if (pathname.includes('meals')) {
       fetchMealDetails(idDaReceita);
     }
     if (pathname.includes('drinks')) {
       fetchDrinkDetails(idDaReceita);
     }
-    console.log('whereDidTheIdComeFrom');
   };
-
   useEffect(() => {
     whereDidTheIdComeFrom();
   }, []);
-
-  console.log(dataDetails);
   return (
     <main>
       <h1>RecipeDetails</h1>
+      {
+        (Object.keys(dataDetails).length > 0 && pathname.includes('meals'))
+          && <MealsCard mealDetails={ dataDetails } />
+      }
+      {
+        (Object.keys(dataDetails).length > 0 && pathname.includes('drinks'))
+          && <DrinksCard drinkDetails={ dataDetails } />
+      }
     </main>
   );
 }
