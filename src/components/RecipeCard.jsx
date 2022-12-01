@@ -39,7 +39,7 @@ export default function RecipeCard() {
       // try {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);                                                            // fazer requisição junto com categorias e manter no estado 
+    console.log(data);                             // fazer requisição junto com categorias e manter no estado 
     const newData = await data[page].filter((recipe, i) => i < twelve && recipe);
     setObjFilter({ arrRecipes: newData, filter: search });
     // } catch (error) {
