@@ -5,15 +5,17 @@ import React from 'react';
 export default function MealsCard({ mealDetails }) {
   const { strMealThumb, strMeal, strCategory, strInstructions, strYoutube } = mealDetails;
 
-  //
-  const formatedInsturctions = strInstructions.split('STEP').slice(1);
   // pega todas as chaves que tem ingredient no nome
+  let allIngredientsValues = [];
+  let allMeasuresValue = [];
+
   const allIngredients = Object.keys(mealDetails).filter(
     (key) => key.includes('strIngredient') === true,
   );
+  const allMeasures = Object.keys(mealDetails).filter(
+    (key) => key.includes('strMeasure') === true,
+  );
 
-  // pega todas as chaves de ingrediente que tem um valor
-  let allIngredientsValues = [];
   allIngredients.forEach((key) => {
     const value = mealDetails[key];
     if (value !== '') {
@@ -21,6 +23,12 @@ export default function MealsCard({ mealDetails }) {
     }
   });
 
+  allMeasures.forEach((key) => {
+    const value = mealDetails[key];
+    if (value !== ' ') {
+      allMeasuresValue = [...allMeasuresValue, [key, value]];
+    }
+  });
   return (
     <main>
       <h1>MealsCard</h1>
@@ -36,20 +44,15 @@ export default function MealsCard({ mealDetails }) {
               key={ index }
               data-testid={ `${index}-ingredient-name-and-measure` }
             >
-              {`${ingredient[0]}: ${ingredient[1]}`}
+              {`${ingredient[0]}: ${ingredient[1]} -- `}
+              {`${allMeasuresValue[index][0]}: ${allMeasuresValue[index][1]}`}
             </p>
 
           ))
         }
       </section>
-      <div>
-        {
-          formatedInsturctions.map(
-            (instruction, index) => (
-              <p key={ index } data-testid="instructions">{`STEP ${instruction}`}</p>
-            ),
-          )
-        }
+      <div data-testid="instructions">
+        <p>{strInstructions}</p>
       </div>
       <iframe
         title={ strMeal }
