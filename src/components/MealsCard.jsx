@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-// import './MealsCard.css';
 
 export default function MealsCard({ mealDetails }) {
   const { strMealThumb, strMeal, strCategory, strInstructions, strYoutube } = mealDetails;
