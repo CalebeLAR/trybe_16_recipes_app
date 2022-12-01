@@ -31,6 +31,7 @@ export default function Provider({ children }) {
 
   const value = useMemo(() => ({
     loading,
+    setLoading,
     arrMealAPI,
     arrDrinkAPI,
     arrMealCategAPI,
