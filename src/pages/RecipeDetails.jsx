@@ -44,9 +44,17 @@ export default function RecipeDetails(props) {
       .catch((error) => console.log(error));
   };
 
+  const fetchDrinksRecommendations = () => {
+    // recomenda comidas;
+    const URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+    fetch(URL)
+      .then((response) => response.json())
+      .then((data) => setDataRecommendations(data))
+      .catch((error) => console.log(error));
+  };
+
   useEffect(() => {
     // fetchDetails();
-    fetchMealsRecommendations();
   }, []);
   return (
     <main>
