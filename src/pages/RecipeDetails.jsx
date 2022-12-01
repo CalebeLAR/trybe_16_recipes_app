@@ -44,22 +44,22 @@ export default function RecipeDetails(props) {
       .then((data) => setDataRecommendations(data.meals.slice(0, MAX)))
       .catch((error) => console.log(error));
   };
-  const fetchDetails = () => {
-    // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
-    const { match: { params: { idDaReceita } } } = props;
-    if (pathname.includes('meals')) {
-      fetchMealDetails(idDaReceita);
-      fetchMealsRecommendations();
-    }
-    if (pathname.includes('drinks')) {
-      fetchDrinkDetails(idDaReceita);
-      fetchDrinksRecommendations();
-    }
-  };
 
   useEffect(() => {
+    const fetchDetails = () => {
+    // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
+      const { match: { params: { idDaReceita } } } = props;
+      if (pathname.includes('meals')) {
+        fetchMealDetails(idDaReceita);
+        fetchMealsRecommendations();
+      }
+      if (pathname.includes('drinks')) {
+        fetchDrinkDetails(idDaReceita);
+        fetchDrinksRecommendations();
+      }
+    };
     fetchDetails();
-  }, []);
+  }, [pathname, props]);
   return (
     <main>
       <h1>RecipeDetails</h1>
@@ -78,6 +78,13 @@ export default function RecipeDetails(props) {
           pathname={ pathname }
         />
       }
+      <button
+        data-testid="start-recipe-btn"
+        type="button"
+        style={ { position: 'fixed', bottom: '0' } }
+      >
+        Start Recipe
+      </button>
     </main>
   );
 }
