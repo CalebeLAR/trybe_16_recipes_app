@@ -86,30 +86,30 @@ export default function RecipeCard() {
       </button>
       {page === 'meals'
         ? objFilter.arrRecipes.map((recipe, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ index }>
-            <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
-            <Link to={ `/meals/${recipe.idMeal}` }>
+          <Link to={ `/meals/${recipe.idMeal}` } key={ index }>
+            <div data-testid={ `${index}-recipe-card` }>
+              <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
               <img
                 style={ { width: '100px' } }
                 src={ recipe.strMealThumb }
                 alt={ recipe.strMeal }
                 data-testid={ `${index}-card-img` }
               />
-            </Link>
-          </div>
+            </div>
+          </Link>
         ))
         : objFilter.arrRecipes.map((recipe, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ index }>
-            <p data-testid={ `${index}-card-name` }>{recipe.strDrink}</p>
-            <Link to={ `/drinks/${recipe.idDrink}` }>
+          <Link to={ `/drinks/${recipe.idDrink}` } key={ index }>
+            <div data-testid={ `${index}-recipe-card` }>
+              <p data-testid={ `${index}-card-name` }>{recipe.strDrink}</p>
               <img
                 style={ { width: '100px' } }
                 src={ recipe.strDrinkThumb }
                 alt={ recipe.strDrink }
                 data-testid={ `${index}-card-img` }
               />
-            </Link>
-          </div>
+            </div>
+          </Link>
         ))}
     </div>
   );
