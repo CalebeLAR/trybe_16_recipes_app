@@ -1,21 +1,24 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import AppRecipeContext from '../contexts/AppRecipeContext';
 import Loading from './Loading';
 
 export default function RecipeCard() {
   const {
     loading,
-    setLoading,
     arrMealAPI,
     arrDrinkAPI,
     arrMealCategAPI,
     arrDrinkCategAPI,
+    route,
   } = useContext(AppRecipeContext);
 
   const history = useHistory();
   const { location: { pathname } } = history;
   const page = pathname.split('/')[1];
+
+  useEffect(() => {
+  }, [route]);
 
   const objFilterInitial = {
     arrRecipes: page === 'meals' ? arrMealAPI : arrDrinkAPI,
@@ -40,8 +43,7 @@ export default function RecipeCard() {
   };
 
   const handleClickFilter = async ({ target }) => {
-    // setLoading(true);
-    const search = target.innerText.split(' ').join('_');
+    const search = target.innerText;
     if (search === objFilter.filter) {
       setObjFilter(objFilterInitial);
     } else if (search !== 'All') {
@@ -50,14 +52,13 @@ export default function RecipeCard() {
     } else {
       setObjFilter(objFilterInitial);
     }
-    // setLoading(false);
   };
 
   useEffect(() => {
     if (objFilter.filter === 'All') {
       setObjFilter(objFilterInitial);
     }
-  }, [loading]);
+  }, [loading, route]);
 
   if (loading) return <Loading />;
   return (
@@ -85,26 +86,29 @@ export default function RecipeCard() {
       </button>
       {page === 'meals'
         ? objFilter.arrRecipes.map((recipe, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ recipe.idMeal }>
+          <div data-testid={ `${index}-recipe-card` } key={ index }>
             <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
-            <img
-              style={ { width: '100px' } }
-              src={ recipe.strMealThumb }
-              alt={ recipe.strMeal }
-              data-testid={ `${index}-card-img` }
-            />
+            <Link to={ `/meals/${recipe.idMeal}` }>
+              <img
+                style={ { width: '100px' } }
+                src={ recipe.strMealThumb }
+                alt={ recipe.strMeal }
+                data-testid={ `${index}-card-img` }
+              />
+            </Link>
           </div>
         ))
         : objFilter.arrRecipes.map((recipe, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ recipe.idDrink }>
+          <div data-testid={ `${index}-recipe-card` } key={ index }>
             <p data-testid={ `${index}-card-name` }>{recipe.strDrink}</p>
-            <img
-              style={ { width: '100px' } }
-              src={ recipe.strDrinkThumb }
-              alt={ recipe.strDrink }
-              data-testid={ `${index}-card-img` }
-            />
-            {console.log(objFilter.arrRecipes)}
+            <Link to={ `/drinks/${recipe.idDrink}` }>
+              <img
+                style={ { width: '100px' } }
+                src={ recipe.strDrinkThumb }
+                alt={ recipe.strDrink }
+                data-testid={ `${index}-card-img` }
+              />
+            </Link>
           </div>
         ))}
     </div>

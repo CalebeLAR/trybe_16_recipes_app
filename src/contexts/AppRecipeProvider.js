@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+// import { useLocation } from 'react-router-dom';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   requestMeals,
@@ -13,6 +14,10 @@ export default function Provider({ children }) {
   const [arrDrinkAPI, setArrDrinkAPI] = useState([]);
   const [arrMealCategAPI, setArrMealCategAPI] = useState([]);
   const [arrDrinkCategAPI, setArrDrinkCategAPI] = useState([]);
+  // const history = useHistory();
+  // const { location: { pathname } } = history;
+  // const location = useLocation();
+  const [route, setRoute] = useState('');
 
   const getRecipes = async () => {
     const meals = await requestMeals();
@@ -36,12 +41,15 @@ export default function Provider({ children }) {
     arrDrinkAPI,
     arrMealCategAPI,
     arrDrinkCategAPI,
+    route,
+    setRoute,
   }), [
     loading,
     arrMealAPI,
     arrDrinkAPI,
     arrMealCategAPI,
     arrDrinkCategAPI,
+    route,
   ]);
 
   return (
