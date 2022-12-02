@@ -1,8 +1,62 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import AppRecipeContext from '../contexts/AppRecipeContext';
+
+const twelve = 12;
 
 export default function SearchBar() {
   const [searchRadioChecked, setSearchRadioChecked] = useState('ingredient');
   const [search, setSearch] = useState('');
+  const context = useContext(AppRecipeContext);
+  const location = useLocation();
+
+  const getPathname = () => location.pathname
+    .slice(1)
+    .split('/')[0];
+
+  const switchEndpoint = () => {
+    const url = getPathname();
+    switch (searchRadioChecked) {
+    case 'ingredient':
+      if (url === 'meals') {
+        return `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`;
+      }
+      return `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${search}`;
+
+    case 'name':
+      if (url === 'meals') {
+        return `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+      }
+      return `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${search}`;
+
+    case 'firstLetter':
+      if (url === 'meals') {
+        return `https://www.themealdb.com/api/json/v1/1/search.php?f=${search}`;
+      }
+      return `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${search}`;
+
+    default:
+      console.log('Ops! Something went wrong. Try again later');
+    }
+  };
+
+  const filterFetch = async () => {
+    const endpoint = switchEndpoint();
+
+    const url = getPathname();
+    const response = await fetch(endpoint);
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
+
+    if (url === 'meals') {
+      const newData = data.meals.filter((drink, i) => i < twelve && drink);
+      context.setArrMealAPI(newData);
+    } else {
+      const newData = data.drinks.filter((drink, i) => i < twelve && drink);
+      context.setArrDrinkAPI(newData);
+    }
+  };
 
   const handleSearch = ({ target }) => {
     if (searchRadioChecked === 'firstLetter'
@@ -12,6 +66,14 @@ export default function SearchBar() {
     } else {
       setSearch(target.value);
     }
+  };
+
+  const getResults = async () => {
+    context.setLoading(true);
+    await filterFetch();
+    context.setLoading(false);
+    console.log('MEALS', context.arrMealAPI);
+    console.log('DRINKS', context.arrDrinkAPI);
   };
 
   return (
@@ -68,6 +130,7 @@ export default function SearchBar() {
       <button
         data-testid="exec-search-btn"
         type="button"
+        onClick={ getResults }
       >
         SEARCH
 
