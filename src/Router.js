@@ -21,6 +21,7 @@ export default function Router() {
           path="/drinks/:id-da-receita/in-progress"
           component={ RecipesInProgress }
         />
+
         {/* linha 22 e 23 : so reconhece o ID se a rota for ecrita assim */}
         <Route path="/meals/:idDaReceita" component={ RecipeDetails } />
         <Route path="/drinks/:idDaReceita" component={ RecipeDetails } />
