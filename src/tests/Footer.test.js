@@ -12,6 +12,7 @@ test('Testa icone drink Footer', () => {
   userEvent.click(drinkIcon);
   const { location: { pathname } } = history;
   expect(pathname).toBe('/drinks');
+  expect(screen.getByText(/drinks/i)).toBeDefined();
 });
 
 test('Testa icone meals Footer', () => {
@@ -22,4 +23,5 @@ test('Testa icone meals Footer', () => {
   userEvent.click(mealIcon);
   const { location: { pathname } } = history;
   expect(pathname).toBe('/meals');
+  expect(screen.getByText(/meals/i)).toBeDefined();
 });

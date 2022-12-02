@@ -46,12 +46,13 @@ export default function RecipeDetails(props) {
   };
 
   useEffect(() => {
-    const fetchDetails = () => {
+    const fetchDetails = async () => {
     // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
       const { match: { params: { idDaReceita } } } = props;
       if (pathname.includes('meals')) {
-        fetchMealDetails(idDaReceita);
-        fetchMealsRecommendations();
+        const arr1 = await fetchMealDetails(idDaReceita);
+        const arr2 = await fetchMealsRecommendations();
+        console.log(arr1, arr2);
       }
       if (pathname.includes('drinks')) {
         fetchDrinkDetails(idDaReceita);

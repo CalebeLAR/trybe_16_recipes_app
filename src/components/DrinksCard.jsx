@@ -30,7 +30,7 @@ export default function DrinksCard({ drinkDetails }) {
     }
   });
 
-  console.log(allIngredientsValues);
+  // console.log(allIngredientsValues);
   return (
     <main>
       <h1>DrinksCard</h1>
