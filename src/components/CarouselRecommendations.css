@@ -1,11 +1,9 @@
 .ContainerAll {
-  height: 160px;
-  width: 100px;
   display: flex;
   flex-direction: row;
+  height: 160px;
   overflow: auto;
-  background-color: blue;
-
+  width: 100px;
 }
 
 .SizeImage {
