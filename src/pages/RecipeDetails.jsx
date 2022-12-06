@@ -116,13 +116,13 @@ export default function RecipeDetails(props) {
           pathname={ pathname }
         />
       }
-      {/* <button
+      <button
         data-testid="start-recipe-btn"
         type="button"
         style={ { position: 'fixed', bottom: '0' } }
       >
         Start Recipe
-      </button> */}
+      </button>
       <button
         data-testid="share-btn"
         type="button"
