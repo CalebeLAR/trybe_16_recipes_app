@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import AppRecipeContext from '../contexts/AppRecipeContext';
 
 const twelve = 12;
@@ -9,6 +9,16 @@ export default function SearchBar() {
   const [search, setSearch] = useState('');
   const context = useContext(AppRecipeContext);
   const location = useLocation();
+  const history = useHistory();
+
+  const showAlert = (error) => {
+    const print = {
+      notfound: 'Sorry, we haven\'t found any recipes for these filters.',
+      chars: 'Only 1 (one) character is allowed',
+    };
+
+    global.alert(print[error]);
+  };
 
   const getPathname = () => location.pathname
     .slice(1)
@@ -40,21 +50,35 @@ export default function SearchBar() {
     }
   };
 
+  const verifyResults = (obj, category) => {
+    if (obj[category] && obj[category].length === 1) {
+      if (category === 'meals') {
+        history.push(`/meals/${obj.meals[0].idMeal}`);
+      } else {
+        history.push(`/drinks/${obj.drinks[0].idDrink}`);
+      }
+    }
+  };
+
   const filterFetch = async () => {
     const endpoint = switchEndpoint();
 
     const url = getPathname();
-    const response = await fetch(endpoint);
-    console.log(response);
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch(endpoint);
+      const data = await response.json();
 
-    if (url === 'meals') {
-      const newData = data.meals.filter((drink, i) => i < twelve && drink);
-      context.setArrMealAPI(newData);
-    } else {
-      const newData = data.drinks.filter((drink, i) => i < twelve && drink);
-      context.setArrDrinkAPI(newData);
+      verifyResults(data, url);
+
+      if (url === 'meals') {
+        const newData = data?.meals.filter((drink, i) => i < twelve && drink);
+        context.setArrMealAPI(newData);
+      } else {
+        const newData = data?.drinks.filter((drink, i) => i < twelve && drink);
+        context.setArrDrinkAPI(newData);
+      }
+    } catch (error) {
+      showAlert('notfound');
     }
   };
 
@@ -72,8 +96,6 @@ export default function SearchBar() {
     context.setLoading(true);
     await filterFetch();
     context.setLoading(false);
-    console.log('MEALS', context.arrMealAPI);
-    console.log('DRINKS', context.arrDrinkAPI);
   };
 
   return (
