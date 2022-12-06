@@ -13,12 +13,38 @@ export default function RecipeDetails(props) {
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
   const [messageCopy, setMessageCopy] = useState(false);
+  console.log(dataDetails);
 
   const clickButtonShare = async () => {
     setMessageCopy(true);
     const url = `http://localhost:3000${pathname}`;
     const messageSaved = await copy(url);
     return messageSaved;
+  };
+
+  const clickButtonFavorite = () => {
+    const oldFav = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    let newFav = [];
+    if (pathname.includes('meals')) {
+      newFav = { id: dataDetails.idMeal,
+        type: 'meal',
+        nationality: dataDetails.strArea,
+        category: dataDetails.strCategory,
+        alcoholicOrNot: '',
+        name: dataDetails.strMeal,
+        image: dataDetails.strMealThumb,
+      };
+    } else {
+      newFav = { id: dataDetails.idDrink,
+        type: 'drink',
+        nationality: '',
+        category: dataDetails.strCategory,
+        alcoholicOrNot: dataDetails.strAlcoholic,
+        name: dataDetails.strDrink,
+        image: dataDetails.strDrinkThumb,
+      };
+    }
+    localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
   };
 
   const fetchMealDetails = (idMeal) => {
@@ -90,13 +116,13 @@ export default function RecipeDetails(props) {
           pathname={ pathname }
         />
       }
-      <button
+      {/* <button
         data-testid="start-recipe-btn"
         type="button"
         style={ { position: 'fixed', bottom: '0' } }
       >
         Start Recipe
-      </button>
+      </button> */}
       <button
         data-testid="share-btn"
         type="button"
@@ -107,6 +133,7 @@ export default function RecipeDetails(props) {
       <button
         data-testid="favorite-btn"
         type="button"
+        onClick={ clickButtonFavorite }
       >
         favoritar
       </button>
