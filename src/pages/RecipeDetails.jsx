@@ -9,6 +9,10 @@ export default function RecipeDetails(props) {
   const { history: { location: { pathname } } } = props;
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
+  // botão "Start Recipe"
+  const doneRecipes = localStorage.getItem('doneRecipes');
+  const completedRecipes = (JSON.parse(doneRecipes)) || ([]);
+  const checkWasDone = completedRecipes.some((recipe) => pathname.includes(recipe.id));
 
   const fetchMealDetails = (idMeal) => {
     // idMeal = '53065';
@@ -26,7 +30,6 @@ export default function RecipeDetails(props) {
       .then((data) => setDataDetails(data.drinks[0]))
       .catch((error) => console.log(error));
   };
-
   const fetchMealsRecommendations = () => {
     // recomenda bebidas;
     const URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
@@ -35,7 +38,6 @@ export default function RecipeDetails(props) {
       .then((data) => setDataRecommendations(data.drinks.slice(0, MAX)))
       .catch((error) => console.log(error));
   };
-
   const fetchDrinksRecommendations = () => {
     // recomenda comidas;
     const URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
@@ -83,6 +85,7 @@ export default function RecipeDetails(props) {
         data-testid="start-recipe-btn"
         type="button"
         style={ { position: 'fixed', bottom: '0' } }
+        disabled={ checkWasDone }
       >
         Start Recipe
       </button>
