@@ -86,6 +86,18 @@ export default function RecipeDetails(props) {
       >
         Start Recipe
       </button>
+      <button
+        data-testid="share-btn"
+        type="button"
+      >
+        compartilhar
+      </button>
+      <button
+        data-testid="favorite-btn"
+        type="button"
+      >
+        favoritar
+      </button>
     </main>
   );
 }
