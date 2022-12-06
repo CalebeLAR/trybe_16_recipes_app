@@ -3,12 +3,23 @@ import { useEffect, useState } from 'react';
 import CarouselRecommendations from '../components/CarouselRecommendations';
 import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
+import shareIcon from '../images/shareIcon.svg';
 
 const MAX = 6;
+const copy = require('clipboard-copy');
+
 export default function RecipeDetails(props) {
   const { history: { location: { pathname } } } = props;
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
+  const [messageCopy, setMessageCopy] = useState(false);
+
+  const clickButtonShare = async () => {
+    setMessageCopy(true);
+    const url = `http://localhost:3000${pathname}`;
+    const messageSaved = await copy(url);
+    return messageSaved;
+  };
 
   const fetchMealDetails = (idMeal) => {
     // idMeal = '53065';
@@ -89,8 +100,9 @@ export default function RecipeDetails(props) {
       <button
         data-testid="share-btn"
         type="button"
+        onClick={ clickButtonShare }
       >
-        compartilhar
+        <img src={ shareIcon } alt="icone" />
       </button>
       <button
         data-testid="favorite-btn"
@@ -98,6 +110,7 @@ export default function RecipeDetails(props) {
       >
         favoritar
       </button>
+      {messageCopy === true && <p>Link copied!</p>}
     </main>
   );
 }
