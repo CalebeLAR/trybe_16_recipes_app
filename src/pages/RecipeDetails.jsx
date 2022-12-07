@@ -6,7 +6,8 @@ import MealsCard from '../components/MealsCard';
 
 const MAX = 6;
 export default function RecipeDetails(props) {
-  const { history: { location: { pathname } } } = props;
+  const { history } = props;
+  const { location: { pathname } } = history;
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
 
@@ -106,6 +107,7 @@ export default function RecipeDetails(props) {
         type="button"
         style={ { position: 'fixed', bottom: '0' } }
         disabled={ checkWasDone }
+        onClick={ () => history.push(`${pathname}/inProgress`) }
       >
         {textButton}
       </button>
@@ -120,6 +122,7 @@ RecipeDetails.propTypes = {
     }).isRequired,
   }).isRequired,
   history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
     }).isRequired,
