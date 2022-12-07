@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import CarouselRecommendations from '../components/CarouselRecommendations';
 import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 const MAX = 6;
 const copy = require('clipboard-copy');
@@ -14,7 +16,7 @@ export default function RecipeDetails(props) {
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
   const [messageCopy, setMessageCopy] = useState(false);
-  console.log(dataDetails);
+  const [saveFavorite, setSaveFavorite] = useState([]);
 
   const clickButtonShare = async () => {
     setMessageCopy(true);
@@ -46,6 +48,19 @@ export default function RecipeDetails(props) {
       };
     }
     localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
+    setSaveFavorite([...oldFav, newFav]);
+  };
+
+  const checkIfIsFavorite = () => {
+    const savedFavorites = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    if (pathname.includes('meals')) {
+      const check = savedFavorites
+        .some((element) => element.id === dataDetails.idMeal);
+      return check;
+    }
+    const check = savedFavorites
+      .some((element) => element.id === dataDetails.idDrink);
+    return check;
   };
 
   // botão "Start Recipe" -----------
@@ -119,8 +134,9 @@ export default function RecipeDetails(props) {
       }
     };
     fetchDetails();
-  }, [pathname, props]);
+  }, [pathname, props, saveFavorite]);
 
+  console.log(checkIfIsFavorite());
   return (
     <main>
       <h1>RecipeDetails</h1>
@@ -139,7 +155,7 @@ export default function RecipeDetails(props) {
           pathname={ pathname }
         />
       }
-      <button
+      {/* <button
         data-testid="start-recipe-btn"
         type="button"
         style={ { position: 'fixed', bottom: '0' } }
@@ -147,7 +163,7 @@ export default function RecipeDetails(props) {
         onClick={ () => history.push(`${pathname}/inProgress`) }
       >
         {textButton}
-      </button>
+      </button> */}
       <button
         data-testid="share-btn"
         type="button"
@@ -156,13 +172,17 @@ export default function RecipeDetails(props) {
         <img src={ shareIcon } alt="icone" />
       </button>
       <button
-        data-testid="favorite-btn"
         type="button"
         onClick={ clickButtonFavorite }
       >
-        favoritar
+        <img
+          data-testid="favorite-btn"
+          src={ checkIfIsFavorite() ? blackHeartIcon : whiteHeartIcon }
+          alt="favorite icon"
+        />
       </button>
       {messageCopy === true && <p>Link copied!</p>}
+
     </main>
   );
 }
