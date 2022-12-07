@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
+import FavoriteDrinkCard from '../components/FavoriteDrinkCard';
+import FavoriteMealCard from '../components/FavoriteMealCard';
 
 // * Todos os data-testids estão presentes:
-// * O botão de filtro `All` deve ter o atributo `data-testid="filter-by-all-btn"`;
-// * O botão de filtro `Meals` deve ter o atributo `data-testid="filter-by-meal-btn"`;
-// * O botão de `Drinks` deve ter o atributo `data-testid="filter-by-drink-btn"`;
-// * A imagem do card de receita deve ter o atributo `data-testid="${index}-horizontal-image"`;
+//  O botão de filtro `All` deve ter o atributo `data-testid="filter-by-all-btn"`;
+//  O botão de filtro `Meals` deve ter o atributo `data-testid="filter-by-meal-btn"`;
+//  O botão de `Drinks` deve ter o atributo `data-testid="filter-by-drink-btn"`;
+//  A imagem do card de receita deve ter o atributo `data-testid="${index}-horizontal-image"`;
 // * O texto da categoria da receita deve ter o atributo `data-testid="${index}-horizontal-top-text"`;
 // * O texto do nome da receita deve ter o atributo `data-testid="${index}-horizontal-name"`;
 // * O elemento de compartilhar a receita deve ter o atributo `data-testid="${index}-horizontal-share-btn"`;
@@ -13,26 +15,47 @@ import Header from '../components/Header';
 
 // testes
 const testRecipe = [{
-  id: 'id-da-receita',
-  type: 'meal-ou-drink',
+  id: '13501',
+  type: 'drink',
   nationality: 'nacionalidade-da-receita-ou-texto-vazio',
   category: 'categoria-da-receita-ou-texto-vazio',
   alcoholicOrNot: 'alcoholic-ou-non-alcoholic-ou-texto-vazio',
-  name: 'nome-da-receita',
-  image: 'imagem-da-receita',
+  name: 'ABC',
+  image: 'https://www.thecocktaildb.com/images/media/drink/tqpvqp1472668328.jpg',
+},
+{
+  id: '52977',
+  type: 'meal',
+  nationality: 'nacionalidade-da-receita-ou-texto-vazio',
+  category: 'categoria-da-receita-ou-texto-vazio',
+  alcoholicOrNot: 'alcoholic-ou-non-alcoholic-ou-texto-vazio',
+  name: 'Corba',
+  image: 'https://www.themealdb.com/images/media/meals/58oia61564916529.jpg',
 }];
 
 localStorage.setItem('favoriteRecipes', JSON.stringify(testRecipe));
 
 const storageFavorites = localStorage.getItem('favoriteRecipes');
 const favoreteRecipes = JSON.parse(storageFavorites);
-console.log(favoreteRecipes);
 export default function FavoriteRecipes() {
+  const [mapFoods, setMapFoods] = useState(favoreteRecipes);
+
   return (
     <main>
       <Header />
       <h1>FavoriteRecipes</h1>
-
+      <section>
+        <button data-testid="filter-by-all-btn" type="button">All</button>
+        <button data-testid="filter-by-meal-btn" type="button">Meals</button>
+        <button data-testid="filter-by-drink-btn" type="button">Drinks</button>
+      </section>
+      {
+        mapFoods.map(
+          (food) => ((food.type === 'meal')
+            ? <FavoriteMealCard /> : <FavoriteDrinkCard />
+          ),
+        )
+      }
     </main>
   );
 }
