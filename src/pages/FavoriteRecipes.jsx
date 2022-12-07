@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import FavoriteCard from '../components/FavoriteCard';
 import Header from '../components/Header';
 
-
 // * Todos os data-testids estão presentes:
 //  O botão de filtro `All` deve ter o atributo `data-testid="filter-by-all-btn"`;
 //  O botão de filtro `Meals` deve ter o atributo `data-testid="filter-by-meal-btn"`;
@@ -38,7 +37,7 @@ localStorage.setItem('favoriteRecipes', JSON.stringify(testRecipe));
 const storageFavorites = localStorage.getItem('favoriteRecipes');
 const favoriteRecipes = JSON.parse(storageFavorites);
 export default function FavoriteRecipes() {
-  const [filter, setFilter] = useState('All');
+  const [filteredRecipes, setFilteredRecipes] = useState(favoriteRecipes);
 
   return (
     <main>
@@ -49,18 +48,7 @@ export default function FavoriteRecipes() {
         <button data-testid="filter-by-meal-btn" type="button">Meals</button>
         <button data-testid="filter-by-drink-btn" type="button">Drinks</button>
       </section>
-      {
-        (filter === 'All')
-          && <FavoriteCard filter={ filter } favoriteRecipes={ favoriteRecipes } />
-      }
-      {
-        (filter === 'Meals')
-          && <FavoriteCard filter={ filter } favoriteRecipes={ favoriteRecipes } />
-      }
-      {
-        (filter === 'Drinks')
-          && <FavoriteCard filter={ filter } favoriteRecipes={ favoriteRecipes } />
-      }
+      <FavoriteCard filteredRecipes={ filteredRecipes } />
     </main>
   );
 }
