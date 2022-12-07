@@ -3,13 +3,50 @@ import { useEffect, useState } from 'react';
 import CarouselRecommendations from '../components/CarouselRecommendations';
 import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
+import shareIcon from '../images/shareIcon.svg';
 
 const MAX = 6;
+const copy = require('clipboard-copy');
+
 export default function RecipeDetails(props) {
   const { history } = props;
   const { location: { pathname } } = history;
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
+  const [messageCopy, setMessageCopy] = useState(false);
+  console.log(dataDetails);
+
+  const clickButtonShare = async () => {
+    setMessageCopy(true);
+    const url = `http://localhost:3000${pathname}`;
+    const messageSaved = await copy(url);
+    return messageSaved;
+  };
+
+  const clickButtonFavorite = () => {
+    const oldFav = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    let newFav = [];
+    if (pathname.includes('meals')) {
+      newFav = { id: dataDetails.idMeal,
+        type: 'meal',
+        nationality: dataDetails.strArea,
+        category: dataDetails.strCategory,
+        alcoholicOrNot: '',
+        name: dataDetails.strMeal,
+        image: dataDetails.strMealThumb,
+      };
+    } else {
+      newFav = { id: dataDetails.idDrink,
+        type: 'drink',
+        nationality: '',
+        category: dataDetails.strCategory,
+        alcoholicOrNot: dataDetails.strAlcoholic,
+        name: dataDetails.strDrink,
+        image: dataDetails.strDrinkThumb,
+      };
+    }
+    localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
+  };
 
   // botão "Start Recipe" -----------
   const doneRecipes = localStorage.getItem('doneRecipes');
@@ -111,6 +148,21 @@ export default function RecipeDetails(props) {
       >
         {textButton}
       </button>
+      <button
+        data-testid="share-btn"
+        type="button"
+        onClick={ clickButtonShare }
+      >
+        <img src={ shareIcon } alt="icone" />
+      </button>
+      <button
+        data-testid="favorite-btn"
+        type="button"
+        onClick={ clickButtonFavorite }
+      >
+        favoritar
+      </button>
+      {messageCopy === true && <p>Link copied!</p>}
     </main>
   );
 }
