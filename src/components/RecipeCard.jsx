@@ -6,6 +6,7 @@ import Loading from './Loading';
 export default function RecipeCard() {
   const {
     loading,
+    // setLoading,
     arrMealAPI,
     arrDrinkAPI,
     arrMealCategAPI,
@@ -43,7 +44,7 @@ export default function RecipeCard() {
   };
 
   const handleClickFilter = async ({ target }) => {
-    const search = target.innerText;
+    const search = target.innerHTML;
     if (search === objFilter.filter || search === 'All') {
       setObjFilter(objFilterInitial);
     } else {

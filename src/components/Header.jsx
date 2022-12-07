@@ -14,7 +14,7 @@ export default function Header() {
   const formatPathname = (str) => (
     str
       .slice(1)
-      .split('-')
+      .split(' ')
       .map((word) => word.replace(/[a-z]/g, (letter, idx) => (
         idx === 0 ? letter.toUpperCase() : letter
       )))

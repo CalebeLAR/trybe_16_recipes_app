@@ -1,27 +1,28 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import Footer from '../components/Footer';
 import renderWithRouter from '../helpers/RenderWithRouter';
+import Recipes from '../pages/Recipes';
 
-test('Testa icone drink Footer', () => {
+test('Testa icone drink Footer', async () => {
   // Este arquivo pode ser modificado ou deletado sem problemas
-  const { history } = renderWithRouter(<Footer />);
+  const { history } = renderWithRouter(<Recipes />);
   const drinkIcon = screen.getByTestId(/drinks-bottom-btn/i);
   expect(drinkIcon).toBeInTheDocument();
   userEvent.click(drinkIcon);
   const { location: { pathname } } = history;
   expect(pathname).toBe('/drinks');
-  expect(screen.getByText(/drinks/i)).toBeDefined();
+  expect(await screen.findByText(/drinks/i)).toBeDefined();
 });
 
-test('Testa icone meals Footer', () => {
+test('Testa icone meals Footer', async () => {
   // Este arquivo pode ser modificado ou deletado sem problemas
-  const { history } = renderWithRouter(<Footer />);
+  const { history } = renderWithRouter(<Recipes />);
   const mealIcon = screen.getByTestId(/meals-bottom-btn/i);
   expect(mealIcon).toBeInTheDocument();
   userEvent.click(mealIcon);
   const { location: { pathname } } = history;
   expect(pathname).toBe('/meals');
-  expect(screen.getByText(/meals/i)).toBeDefined();
+  screen.debug();
+  expect(await screen.findByText(/meals/i)).toBeDefined();
 });
