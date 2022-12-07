@@ -9,10 +9,30 @@ export default function RecipeDetails(props) {
   const { history: { location: { pathname } } } = props;
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
-  // botão "Start Recipe"
+
+  // botão "Start Recipe" -----------
   const doneRecipes = localStorage.getItem('doneRecipes');
+  const inProgressRecipes = localStorage.getItem('inProgressRecipes');
+
   const completedRecipes = (JSON.parse(doneRecipes)) || ([]);
+  const progressRecipes = (JSON.parse(inProgressRecipes)) || ({ drinks: [], meals: [] });
   const checkWasDone = completedRecipes.some((recipe) => pathname.includes(recipe.id));
+  const checkItProgress = (valueRecipes) => {
+    if (pathname.includes('meals')) {
+      const { meals } = valueRecipes;
+      const mealsIds = Object.keys(meals);
+      return mealsIds.some((mealId) => pathname.includes(mealId));
+    }
+    if (pathname.includes('drinks')) {
+      const { drinks } = valueRecipes;
+      const drinksIds = Object.keys(drinks);
+      return drinksIds.some((drinkId) => pathname.includes(drinkId));
+    }
+  };
+
+  const checkProgress = checkItProgress(progressRecipes);
+  const textButton = (checkProgress) ? 'Continue Recipe' : 'Start Recipe';
+  // ----------- botão "Start Recipe"
 
   const fetchMealDetails = (idMeal) => {
     // idMeal = '53065';
@@ -87,7 +107,7 @@ export default function RecipeDetails(props) {
         style={ { position: 'fixed', bottom: '0' } }
         disabled={ checkWasDone }
       >
-        Start Recipe
+        {textButton}
       </button>
     </main>
   );
