@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import FavoriteCard from '../components/FavoriteCard';
 import Header from '../components/Header';
-import FavoriteDrinkCard from '../components/FavoriteDrinkCard';
-import FavoriteMealCard from '../components/FavoriteMealCard';
+
 
 // * Todos os data-testids estão presentes:
 //  O botão de filtro `All` deve ter o atributo `data-testid="filter-by-all-btn"`;
@@ -36,9 +36,9 @@ const testRecipe = [{
 localStorage.setItem('favoriteRecipes', JSON.stringify(testRecipe));
 
 const storageFavorites = localStorage.getItem('favoriteRecipes');
-const favoreteRecipes = JSON.parse(storageFavorites);
+const favoriteRecipes = JSON.parse(storageFavorites);
 export default function FavoriteRecipes() {
-  const [mapFoods, setMapFoods] = useState(favoreteRecipes);
+  const [filter, setFilter] = useState('All');
 
   return (
     <main>
@@ -50,11 +50,16 @@ export default function FavoriteRecipes() {
         <button data-testid="filter-by-drink-btn" type="button">Drinks</button>
       </section>
       {
-        mapFoods.map(
-          (food) => ((food.type === 'meal')
-            ? <FavoriteMealCard /> : <FavoriteDrinkCard />
-          ),
-        )
+        (filter === 'All')
+          && <FavoriteCard filter={ filter } favoriteRecipes={ favoriteRecipes } />
+      }
+      {
+        (filter === 'Meals')
+          && <FavoriteCard filter={ filter } favoriteRecipes={ favoriteRecipes } />
+      }
+      {
+        (filter === 'Drinks')
+          && <FavoriteCard filter={ filter } favoriteRecipes={ favoriteRecipes } />
       }
     </main>
   );
