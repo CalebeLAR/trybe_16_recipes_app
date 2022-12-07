@@ -144,7 +144,7 @@ export default function RecipeDetails(props) {
         type="button"
         style={ { position: 'fixed', bottom: '0' } }
         disabled={ checkWasDone }
-        onClick={ () => history.push(`${pathname}/inProgress`) }
+        onClick={ () => history.push(`${pathname}/in-progress`) }
       >
         {textButton}
       </button>
