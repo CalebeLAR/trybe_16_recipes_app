@@ -5,6 +5,12 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
 export default function FavoriteCard({ filteredRecipes }) {
+  const onShareBtnClick = () => {
+    console.log('share');
+  };
+  const onFavoriteBtnClick = () => {
+    console.log('favorite');
+  };
   return (
     <section>
       {
@@ -35,11 +41,13 @@ export default function FavoriteCard({ filteredRecipes }) {
                   dataTestid={ `${index}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt={ blackHeartIcon }
+                  onClick={ onShareBtnClick }
                 />
                 <FavoriteButtons
                   dataTestid={ `${index}-horizontal-favorite-btn` }
                   src={ blackHeartIcon }
                   alt={ blackHeartIcon }
+                  onClick={ onFavoriteBtnClick }
                 />
               </div>
             </div>
@@ -68,11 +76,13 @@ export default function FavoriteCard({ filteredRecipes }) {
                   dataTestid={ `${index}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt={ blackHeartIcon }
+                  onClick={ onShareBtnClick }
                 />
                 <FavoriteButtons
                   dataTestid={ `${index}-horizontal-favorite-btn` }
                   src={ blackHeartIcon }
                   alt={ blackHeartIcon }
+                  onClick={ onFavoriteBtnClick }
                 />
               </div>
             </div>
