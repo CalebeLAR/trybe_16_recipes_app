@@ -16,13 +16,25 @@ export default function RecipeDetails(props) {
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
   const [messageCopy, setMessageCopy] = useState(false);
-  const [saveFavorite, setSaveFavorite] = useState([]);
+  const [saveFavorite, setSaveFavorite] = useState(false);
 
   const clickButtonShare = async () => {
     setMessageCopy(true);
     const url = `http://localhost:3000${pathname}`;
     const messageSaved = await copy(url);
     return messageSaved;
+  };
+
+  const checkIfIsFavorite = () => {
+    const savedFavorites = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    if (pathname.includes('meals')) {
+      const check = savedFavorites
+        .some((element) => element.id === dataDetails.idMeal);
+      setSaveFavorite(check);
+    }
+    const check = savedFavorites
+      .some((element) => element.id === dataDetails.idDrink);
+    setSaveFavorite(check);
   };
 
   const clickButtonFavorite = () => {
@@ -48,19 +60,8 @@ export default function RecipeDetails(props) {
       };
     }
     localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
-    setSaveFavorite([...oldFav, newFav]);
-  };
-
-  const checkIfIsFavorite = () => {
-    const savedFavorites = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
-    if (pathname.includes('meals')) {
-      const check = savedFavorites
-        .some((element) => element.id === dataDetails.idMeal);
-      return check;
-    }
-    const check = savedFavorites
-      .some((element) => element.id === dataDetails.idDrink);
-    return check;
+    // setSaveFavorite(!saveFavorite);
+    checkIfIsFavorite();
   };
 
   // botão "Start Recipe" -----------
@@ -134,9 +135,12 @@ export default function RecipeDetails(props) {
       }
     };
     fetchDetails();
-  }, [pathname, props, saveFavorite]);
+  }, [pathname, props]);
 
-  console.log(checkIfIsFavorite());
+  useEffect(() => {
+    checkIfIsFavorite();
+  }, []);
+
   return (
     <main>
       <h1>RecipeDetails</h1>
@@ -177,7 +181,7 @@ export default function RecipeDetails(props) {
       >
         <img
           data-testid="favorite-btn"
-          src={ checkIfIsFavorite() ? blackHeartIcon : whiteHeartIcon }
+          src={ saveFavorite ? blackHeartIcon : whiteHeartIcon }
           alt="favorite icon"
         />
       </button>
