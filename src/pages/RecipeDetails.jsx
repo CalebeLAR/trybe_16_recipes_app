@@ -123,12 +123,16 @@ export default function RecipeDetails(props) {
       }),
     });
     localStorage.setItem('inProgressRecipes', JSON.stringify(newObjInProgress));
+    setInProgress(true);
     history.push(`${pathname}/in-progress`);
   };
 
   useEffect(() => {
-    createObjRecipe();
     checkInProgress();
+  });
+
+  useEffect(() => {
+    createObjRecipe();
     checkDone();
   }, [dataDetails]);
 
