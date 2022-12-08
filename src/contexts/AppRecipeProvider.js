@@ -42,6 +42,8 @@ export default function Provider({ children }) {
     arrDrinkCategAPI,
     route,
     setRoute,
+    setArrMealAPI,
+    setArrDrinkAPI,
   }), [
     loading,
     arrMealAPI,

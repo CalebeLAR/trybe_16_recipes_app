@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import SearchBar from './SearchBar';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
 import './Header.css';
@@ -56,35 +57,7 @@ export default function Header() {
         </div>
       </div>
 
-      {isSearchOpen && (
-        <div className="search">
-          <input
-            data-testid="search-input"
-            type="search"
-            name=""
-            placeholder="Search"
-          />
-
-          <div>
-            <label htmlFor="ingredient">
-              <input type="radio" name="" id="ingredient" />
-              Ingredient
-            </label>
-
-            <label htmlFor="name">
-              <input type="radio" name="" id="name" />
-              Name
-            </label>
-
-            <label htmlFor="firstLetter">
-              <input type="radio" name="" id="firstLetter" />
-              First Letter
-            </label>
-          </div>
-
-          <button type="button">SEARCH</button>
-        </div>
-      )}
+      {isSearchOpen && <SearchBar />}
 
       <div>
         <p data-testid="page-title">
