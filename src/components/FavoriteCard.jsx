@@ -24,7 +24,7 @@ export default function FavoriteCard({ filteredRecipes, setFilteredRecipes }) {
     localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
     setFilteredRecipes(favoriteAvoidRepeat);
   };
-  console.log(oldFav);
+
   return (
     <section>
       {
