@@ -4,7 +4,8 @@ import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 
 export default function DoneRecipes() {
-  const [arrDoneRecipes, setArrDoneRecipes] = useState([]);
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+  const [arrDoneRecipes, setArrDoneRecipes] = useState(doneRecipes);
 
   const handleClickFilter = ({ target: { id } }) => {
     switch (id) {
@@ -37,7 +38,7 @@ export default function DoneRecipes() {
         data-testid="filter-by-meal-btn"
         onClick={ handleClickFilter }
       >
-        All
+        Meal
       </button>
       <button
         type="button"
@@ -45,7 +46,7 @@ export default function DoneRecipes() {
         data-testid="filter-by-drink-btn"
         onClick={ handleClickFilter }
       >
-        All
+        Drink
       </button>
       {arrDoneRecipes.map((recipe, index) => (
         <div data-testid={ `${index}-recipe-card` } key={ index }>

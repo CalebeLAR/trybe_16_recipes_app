@@ -23,6 +23,5 @@ test('Testa icone meals Footer', async () => {
   userEvent.click(mealIcon);
   const { location: { pathname } } = history;
   expect(pathname).toBe('/meals');
-  screen.debug();
   expect(await screen.findByText(/meals/i)).toBeDefined();
 });
