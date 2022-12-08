@@ -30,11 +30,11 @@ export default function RecipeDetails(props) {
     if (pathname.includes('meals')) {
       const check = savedFavorites
         .some((element) => element.id === dataDetails.idMeal);
-      setSaveFavorite(check);
+      return check;
     }
     const check = savedFavorites
       .some((element) => element.id === dataDetails.idDrink);
-    setSaveFavorite(check);
+    return check;
   };
 
   const clickButtonFavorite = () => {
@@ -59,8 +59,15 @@ export default function RecipeDetails(props) {
         image: dataDetails.strDrinkThumb,
       };
     }
-    localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
-    // setSaveFavorite(!saveFavorite);
+    if (!oldFav.find((element) => element.id === newFav.id)) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
+      setSaveFavorite(!saveFavorite);
+    } else {
+      const favoriteAvoidRepeat = oldFav.filter((element) => element.id !== newFav.id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
+      setSaveFavorite(!saveFavorite);
+    }
+
     checkIfIsFavorite();
   };
 
@@ -181,7 +188,7 @@ export default function RecipeDetails(props) {
       >
         <img
           data-testid="favorite-btn"
-          src={ saveFavorite ? blackHeartIcon : whiteHeartIcon }
+          src={ checkIfIsFavorite() ? blackHeartIcon : whiteHeartIcon }
           alt="favorite icon"
         />
       </button>
