@@ -1,12 +1,15 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import FavoriteButtons from './FavoriteButtons';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import shareIcon from '../images/shareIcon.svg';
 
 export default function FavoriteCard({ filteredRecipes }) {
   return (
     <section>
       {
         filteredRecipes.map((favRecipe, index) => {
-          const { type, name, image, category, alcoholicOrNo, nationality } = favRecipe;
+          const { type, name, image, category, alcoholicOrNot, nationality } = favRecipe;
           return (type === 'meal') ? (
             <div key={ name }>
               <img
@@ -24,23 +27,20 @@ export default function FavoriteCard({ filteredRecipes }) {
                 <p
                   data-testid={ `${index}-horizontal-top-text` }
                 >
-                  {`categoria: ${category}`}
+                  {`${nationality} - ${category}`}
                 </p>
-                <p>{`origem: ${nationality}`}</p>
               </div>
               <div>
-                <button
-                  data-testid={ `${index}-horizontal-share-btn` }
-                  type="button"
-                >
-                  compartilhar receita
-                </button>
-                <button
-                  data-testid={ `${index}-horizontal-favorite-btn` }
-                  type="button"
-                >
-                  Favorite
-                </button>
+                <FavoriteButtons
+                  dataTestid={ `${index}-horizontal-share-btn` }
+                  src={ shareIcon }
+                  alt={ blackHeartIcon }
+                />
+                <FavoriteButtons
+                  dataTestid={ `${index}-horizontal-favorite-btn` }
+                  src={ blackHeartIcon }
+                  alt={ blackHeartIcon }
+                />
               </div>
             </div>
           ) : (
@@ -60,24 +60,20 @@ export default function FavoriteCard({ filteredRecipes }) {
                 <p
                   data-testid={ `${index}-horizontal-top-text` }
                 >
-                  {`categoria: ${category}`}
+                  {alcoholicOrNot}
                 </p>
-                <p>{`origem: ${nationality}`}</p>
-                <p>{`alcolica: ${alcoholicOrNo}`}</p>
               </div>
               <div>
-                <button
-                  data-testid={ `${index}-horizontal-share-btn` }
-                  type="button"
-                >
-                  compartilhar receita
-                </button>
-                <button
-                  data-testid={ `${index}-horizontal-favorite-btn` }
-                  type="button"
-                >
-                  Favorite
-                </button>
+                <FavoriteButtons
+                  dataTestid={ `${index}-horizontal-share-btn` }
+                  src={ shareIcon }
+                  alt={ blackHeartIcon }
+                />
+                <FavoriteButtons
+                  dataTestid={ `${index}-horizontal-favorite-btn` }
+                  src={ blackHeartIcon }
+                  alt={ blackHeartIcon }
+                />
               </div>
             </div>
           );
