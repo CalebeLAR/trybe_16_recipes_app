@@ -7,7 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 const copy = require('clipboard-copy');
 
 const TIME_ALERT = 5000;
-export default function FavoriteCard({ filteredRecipes }) {
+export default function FavoriteCard({ filteredRecipes, setFilteredRecipes }) {
   const [messageCopy, setMessageCopy] = useState(false);
   const onShareBtnClick = async (type, id) => {
     setMessageCopy(true);
@@ -17,9 +17,14 @@ export default function FavoriteCard({ filteredRecipes }) {
       setMessageCopy(false);
     }, TIME_ALERT);
   };
-  const onFavoriteBtnClick = () => {
-    console.log('favorite');
+  const storage = localStorage.getItem('favoriteRecipes');
+  const oldFav = JSON.parse(storage);
+  const onFavoriteBtnClick = (id) => {
+    const favoriteAvoidRepeat = oldFav.filter((element) => element.id !== id);
+    localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
+    setFilteredRecipes(favoriteAvoidRepeat);
   };
+  console.log(oldFav);
   return (
     <section>
       {
@@ -70,7 +75,7 @@ export default function FavoriteCard({ filteredRecipes }) {
                   dataTestid={ `${index}-horizontal-favorite-btn` }
                   src={ blackHeartIcon }
                   alt={ blackHeartIcon }
-                  onClick={ () => onFavoriteBtnClick() }
+                  onClick={ () => onFavoriteBtnClick(id) }
                 />
               </div>
             </div>
@@ -91,4 +96,5 @@ FavoriteCard.propTypes = {
     name: PropTypes.string,
     image: PropTypes.string,
   })).isRequired,
+  setFilteredRecipes: PropTypes.func.isRequired,
 };

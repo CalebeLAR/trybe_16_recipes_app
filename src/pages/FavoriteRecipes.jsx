@@ -41,7 +41,7 @@ const favoriteRecipes = JSON.parse(storageFavorites) || [];
 const allRecipes = [...favoriteRecipes];
 
 export default function FavoriteRecipes() {
-  const [filteredRecipes] = useState(allRecipes);
+  const [filteredRecipes, setFilteredRecipes] = useState(allRecipes);
 
   return (
     <main>
@@ -52,7 +52,10 @@ export default function FavoriteRecipes() {
         <button data-testid="filter-by-meal-btn" type="button">Meals</button>
         <button data-testid="filter-by-drink-btn" type="button">Drinks</button>
       </section>
-      <FavoriteCard filteredRecipes={ filteredRecipes } />
+      <FavoriteCard
+        filteredRecipes={ filteredRecipes }
+        setFilteredRecipes={ setFilteredRecipes }
+      />
     </main>
   );
 }
