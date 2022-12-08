@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import FavoriteButtons from './FavoriteButtons';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
+const copy = require('clipboard-copy');
+
+const TIME_ALERT = 5000;
 export default function FavoriteCard({ filteredRecipes }) {
-  const onShareBtnClick = () => {
-    global.alert('Link copied!');
+  const [messageCopy, setMessageCopy] = useState(false);
+  const onShareBtnClick = async (type, id) => {
+    setMessageCopy(true);
+    const URL = `http://localhost:3000/${type}s/${id}`;
+    copy(URL);
+    setTimeout(() => {
+      setMessageCopy(false);
+    }, TIME_ALERT);
   };
   const onFavoriteBtnClick = () => {
     console.log('favorite');
@@ -15,7 +24,8 @@ export default function FavoriteCard({ filteredRecipes }) {
     <section>
       {
         filteredRecipes.map((favRecipe, index) => {
-          const { type, name, image, category, alcoholicOrNot, nationality } = favRecipe;
+          const { type,
+            name, image, category, alcoholicOrNot, nationality, id } = favRecipe;
           return (
             <div key={ name }>
               <img
@@ -51,13 +61,16 @@ export default function FavoriteCard({ filteredRecipes }) {
                   dataTestid={ `${index}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt={ blackHeartIcon }
-                  onClick={ onShareBtnClick }
+                  onClick={ () => onShareBtnClick(type, id) }
                 />
+                {
+                  messageCopy && <p>Link copied!</p>
+                }
                 <FavoriteButtons
                   dataTestid={ `${index}-horizontal-favorite-btn` }
                   src={ blackHeartIcon }
                   alt={ blackHeartIcon }
-                  onClick={ onFavoriteBtnClick }
+                  onClick={ () => onFavoriteBtnClick() }
                 />
               </div>
             </div>
