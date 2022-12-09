@@ -14,15 +14,15 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route
-          path="/meals/:id-da-receita/in-progress"
+          path="/meals/:idDaReceita/in-progress"
           component={ RecipesInProgress }
         />
         <Route
-          path="/drinks/:id-da-receita/in-progress"
+          path="/drinks/:idDaReceita/in-progress"
           component={ RecipesInProgress }
         />
 
-        {/* linha 22 e 23 : so reconhece o ID se a rota for ecrita assim */}
+        {/* linha 22 e 23 : so reconhece o ID se a rota for escrita assim */}
         <Route path="/meals/:idDaReceita" component={ RecipeDetails } />
         <Route path="/drinks/:idDaReceita" component={ RecipeDetails } />
         <Route path="/done-recipes" component={ DoneRecipes } />
