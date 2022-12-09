@@ -5,12 +5,13 @@ import CarouselRecommendations from '../components/CarouselRecommendations';
 import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
 import shareIcon from '../images/shareIcon.svg';
-const copy = require('clipboard-copy');
 import {
   fetchDrinkDetails,
   fetchDrinksRecommendations,
   fetchMealDetails,
   fetchMealsRecommendations } from '../services/requestAPIs';
+
+const copy = require('clipboard-copy');
 
 export default function RecipeDetails(props) {
   const { history: { location: { pathname } } } = props;
@@ -77,29 +78,31 @@ export default function RecipeDetails(props) {
     localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
   };
 
+  const checkDoneAndProgress = () => {
   // botão "Start Recipe" -----------
-  const doneRecipes = localStorage.getItem('doneRecipes');
-  const inProgressRecipes = localStorage.getItem('inProgressRecipes');
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+    // const completedRecipes = (JSON.parse(doneRecipes)) || ([]);
+    setIsDone(doneRecipes.some((recipe) => pathname.includes(recipe.id)));
 
-  const completedRecipes = (JSON.parse(doneRecipes)) || ([]);
-  const progressRecipes = (JSON.parse(inProgressRecipes)) || ({ drinks: [], meals: [] });
-  const checkWasDone = completedRecipes.some((recipe) => pathname.includes(recipe.id));
-  const checkItProgress = (valueRecipes) => {
-    if (pathname.includes('meals')) {
-      const { meals } = valueRecipes;
-      const mealsIds = Object.keys(meals);
-      return mealsIds.some((mealId) => pathname.includes(mealId));
-    }
-    if (pathname.includes('drinks')) {
-      const { drinks } = valueRecipes;
-      const drinksIds = Object.keys(drinks);
-      return drinksIds.some((drinkId) => pathname.includes(drinkId));
-    }
-  };
-  
-  const checkProgress = checkItProgress(progressRecipes);
-  setInProgress(checkProgress)
+    const inProgressRecipes = localStorage.getItem('inProgressRecipes');
+    const progressRecipes = (JSON.parse(inProgressRecipes))
+      || ({ drinks: [], meals: [] });
+    const checkInProgress = (valueRecipes) => {
+      if (pathname.includes('meals')) {
+        const { meals } = valueRecipes;
+        const mealsIds = Object.keys(meals);
+        return mealsIds.some((mealId) => pathname.includes(mealId));
+      }
+      if (pathname.includes('drinks')) {
+        const { drinks } = valueRecipes;
+        const drinksIds = Object.keys(drinks);
+        return drinksIds.some((drinkId) => pathname.includes(drinkId));
+      }
+    };
+    const checkProgress = checkInProgress(progressRecipes);
+    setInProgress(checkProgress);
   // ----------- botão "Start Recipe"
+  };
 
   useEffect(() => {
     const requestDetails = async () => {
@@ -132,12 +135,11 @@ export default function RecipeDetails(props) {
   };
 
   useEffect(() => {
-    checkInProgress();
+    checkDoneAndProgress();
   });
 
   useEffect(() => {
     createObjRecipe();
-    checkDone();
   }, [dataDetails]);
 
   return (
@@ -169,7 +171,7 @@ export default function RecipeDetails(props) {
           >
             {inProgress ? 'Continue Recipe' : 'Start Recipe'}
           </button>
-        )} 
+        )}
       <button
         data-testid="share-btn"
         type="button"
