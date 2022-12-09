@@ -14,7 +14,13 @@ export default function RecipeDetails(props) {
   const [dataDetails, setDataDetails] = useState(false);
   const [dataRecommendations, setDataRecommendations] = useState(false);
   const [messageCopy, setMessageCopy] = useState(false);
-  console.log(dataDetails);
+
+  // console.log('Details', dataDetails);
+
+  const buttonStyle = {
+    position: 'fixed',
+    bottom: '0',
+  };
 
   const clickButtonShare = async () => {
     setMessageCopy(true);
@@ -142,9 +148,9 @@ export default function RecipeDetails(props) {
       <button
         data-testid="start-recipe-btn"
         type="button"
-        style={ { position: 'fixed', bottom: '0' } }
+        style={ buttonStyle }
         disabled={ checkWasDone }
-        onClick={ () => history.push(`${pathname}/inProgress`) }
+        onClick={ () => history.push(`${pathname}/in-progress`) }
       >
         {textButton}
       </button>
