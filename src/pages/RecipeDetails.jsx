@@ -7,43 +7,122 @@ import MealsCard from '../components/MealsCard';
 import shareIcon from '../images/shareIcon.svg';
 import {
   fetchDrinkDetails,
-  fetchDrinksRecommendations,
   fetchMealDetails,
-  fetchMealsRecommendations } from '../services/requestAPIs';
+  requestDrinks,
+  requestMeals } from '../services/requestAPIs';
 
+const MAX = 6;
 const copy = require('clipboard-copy');
 
 export default function RecipeDetails(props) {
   const { history: { location: { pathname } } } = props;
+  const page = pathname.split('/')[1];
   const history = useHistory();
-  const [dataDetails, setDataDetails] = useState(false);
+  const [dataDetails, setDataDetails] = useState({});
   const [dataRecommendations, setDataRecommendations] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const [objRecipe, setObjRecipe] = useState({});
+  // const [objDoneRecipe, setObjDoneRecipe] = useState({});
   const [messageCopy, setMessageCopy] = useState(false);
+  const [arrIngredients, setArrIngredients] = useState([]);
+  // Pega o id e o path da pagina para renderizar apenas comidas ou bebidas da página;
+  const { match: { params: { idDaReceita } } } = props;
 
-  const createObjRecipe = async () => {
-    const { match: { params: { idDaReceita } } } = props;
-    const recipeDetails = pathname.includes('meals')
-      ? await fetchMealDetails(idDaReceita)
-      : await fetchDrinkDetails(idDaReceita);
+  // const createObjDoneRecipe = async () => {
+  //   setObjDoneRecipe(
+  //     {
+  //       id: idDaReceita,
+  //       type: page,
+  //       nationality: dataDetails.strArea ? dataDetails.strArea : '',
+  //       category: dataDetails.strCategory ? dataDetails.strCategory : '',
+  //       alcoholicOrNot: dataDetails.strAlcoholic ? dataDetails.strAlcoholic : '',
+  //       name: dataDetails.strMeal ? dataDetails.strMeal : dataDetails.strDrink,
+  //       image: dataDetails.strMealThumb
+  //         ? dataDetails.strMealThumb
+  //         : dataDetails.strDrinkThumb,
+  //       doneDate: '',
+  //       tags: dataDetails.strTags ? dataDetails.strTags.split(',').map((t) => t) : [],
+  //     },
+  //   );
+  // };
 
-    setObjRecipe(
-      {
-        id: idDaReceita,
-        type: pathname.split('/')[1],
-        nationality: recipeDetails.strArea ? recipeDetails.strArea : '',
-        category: recipeDetails.strCategory ? recipeDetails.strCategory : '',
-        alcoholicOrNot: recipeDetails.strAlcoholic ? recipeDetails.strAlcoholic : '',
-        name: recipeDetails.strMeal ? recipeDetails.strMeal : recipeDetails.strDrink,
-        image: recipeDetails.strMealThumb
-          ? recipeDetails.strMealThumb
-          : recipeDetails.strDrinkThumb,
-        doneDate: '',
-        tags: recipeDetails.strTags ? recipeDetails.strTags : [],
-      },
-    );
+  const createArrIngredients = () => {
+    const ingredients = Object.entries(dataDetails)
+      .filter((arr) => arr[0].includes('strIngredient')
+        && arr[1] !== ''
+        && arr[1] !== null);
+    setArrIngredients(ingredients.map((i) => i[1]));
+  };
+
+  useEffect(() => {
+    // createObjDoneRecipe();
+    createArrIngredients();
+  }, [dataDetails]);
+
+  const checkDoneAndProgress = () => {
+  // botão "Start Recipe" -----------
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+    setIsDone(doneRecipes.some((recipe) => recipe.id === idDaReceita));
+
+    const inProgressRecipes = JSON.parse(localStorage
+      .getItem('inProgressRecipes')) || ({ drinks: {}, meals: {} });
+    const inProgressIds = Object.keys(inProgressRecipes[page]);
+    setInProgress(inProgressIds.some((id) => id === idDaReceita));
+
+    // const progressRecipes = (JSON.parse(inProgressRecipes))
+    // || ({ drinks: [], meals: [] });
+    // const checkInProgress = (valueRecipes) => {
+    //   const { recipe } = valueRecipes;
+    //   const recipeId = Object.keys(recipe);
+    //   if (pathname.includes('meals')) {
+    //     const { meals } = valueRecipes;
+    //     const mealsIds = Object.keys(meals);
+    //     return mealsIds.some((mealId) => pathname.includes(mealId));
+    //   }
+    //   if (pathname.includes('drinks')) {
+    //     const { drinks } = valueRecipes;
+    //     const drinksIds = Object.keys(drinks);
+    //     return drinksIds.some((drinkId) => pathname.includes(drinkId));
+    //   }
+    // };
+    // const checkProgress = checkInProgress(progressRecipes);
+    // setInProgress(checkProgress);
+  // ----------- botão "Start Recipe"
+  };
+
+  useEffect(() => {
+    checkDoneAndProgress();
+  });
+
+  const requestDetails = async () => {
+    if (pathname.includes('meals')) {
+      setDataDetails(await fetchMealDetails(idDaReceita));
+      const recomends = await requestDrinks();
+      setDataRecommendations(recomends.slice(0, MAX));
+    }
+    if (pathname.includes('drinks')) {
+      setDataDetails(await fetchDrinkDetails(idDaReceita));
+      const recomends = await requestMeals();
+      setDataRecommendations(recomends.slice(0, MAX));
+    }
+  };
+
+  useEffect(() => {
+    requestDetails();
+  }, [pathname, props]);
+
+  const handleStartRecipe = () => {
+    const inProgressSaved = JSON.parse(localStorage.getItem('inProgressRecipes') || '{}');
+    const newObjInProgress = ({
+      ...inProgressSaved,
+      [page]: ({
+        ...inProgressSaved[page],
+        [idDaReceita]: arrIngredients,
+      }),
+    });
+    localStorage.setItem('inProgressRecipes', JSON.stringify(newObjInProgress));
+    setInProgress(true); // necessario aqui?
+    history.push(`${pathname}/in-progress`);
   };
 
   const clickButtonShare = async () => {
@@ -55,92 +134,38 @@ export default function RecipeDetails(props) {
 
   const clickButtonFavorite = () => {
     const oldFav = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
-    let newFav = [];
-    if (pathname.includes('meals')) {
-      newFav = { id: dataDetails.idMeal,
-        type: 'meal',
-        nationality: dataDetails.strArea,
-        category: dataDetails.strCategory,
-        alcoholicOrNot: '',
-        name: dataDetails.strMeal,
-        image: dataDetails.strMealThumb,
-      };
-    } else {
-      newFav = { id: dataDetails.idDrink,
-        type: 'drink',
-        nationality: '',
-        category: dataDetails.strCategory,
-        alcoholicOrNot: dataDetails.strAlcoholic,
-        name: dataDetails.strDrink,
-        image: dataDetails.strDrinkThumb,
-      };
-    }
+    const newFav = {
+      id: idDaReceita,
+      type: page,
+      nationality: dataDetails.strArea ? dataDetails.strArea : '',
+      category: dataDetails.strCategory ? dataDetails.strCategory : '',
+      alcoholicOrNot: dataDetails.strAlcoholic ? dataDetails.strAlcoholic : '',
+      name: dataDetails.strMeal ? dataDetails.strMeal : dataDetails.strDrink,
+      image: dataDetails.strMealThumb
+        ? dataDetails.strMealThumb
+        : dataDetails.strDrinkThumb,
+    };
+    // if (pathname.includes('meals')) {
+    //   newFav = { id: dataDetails.idMeal,
+    //     type: 'meal',
+    //     nationality: dataDetails.strArea,
+    //     category: dataDetails.strCategory,
+    //     alcoholicOrNot: '',
+    //     name: dataDetails.strMeal,
+    //     image: dataDetails.strMealThumb,
+    //   };
+    // } else {
+    //   newFav = { id: dataDetails.idDrink,
+    //     type: 'drink',
+    //     nationality: '',
+    //     category: dataDetails.strCategory,
+    //     alcoholicOrNot: dataDetails.strAlcoholic,
+    //     name: dataDetails.strDrink,
+    //     image: dataDetails.strDrinkThumb,
+    //   };
+    // }
     localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
   };
-
-  const checkDoneAndProgress = () => {
-  // botão "Start Recipe" -----------
-    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
-    // const completedRecipes = (JSON.parse(doneRecipes)) || ([]);
-    setIsDone(doneRecipes.some((recipe) => pathname.includes(recipe.id)));
-
-    const inProgressRecipes = localStorage.getItem('inProgressRecipes');
-    const progressRecipes = (JSON.parse(inProgressRecipes))
-      || ({ drinks: [], meals: [] });
-    const checkInProgress = (valueRecipes) => {
-      if (pathname.includes('meals')) {
-        const { meals } = valueRecipes;
-        const mealsIds = Object.keys(meals);
-        return mealsIds.some((mealId) => pathname.includes(mealId));
-      }
-      if (pathname.includes('drinks')) {
-        const { drinks } = valueRecipes;
-        const drinksIds = Object.keys(drinks);
-        return drinksIds.some((drinkId) => pathname.includes(drinkId));
-      }
-    };
-    const checkProgress = checkInProgress(progressRecipes);
-    setInProgress(checkProgress);
-  // ----------- botão "Start Recipe"
-  };
-
-  useEffect(() => {
-    const requestDetails = async () => {
-    // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
-      const { match: { params: { idDaReceita } } } = props;
-      if (pathname.includes('meals')) {
-        setDataDetails(await fetchMealDetails(idDaReceita));
-        setDataRecommendations(await fetchMealsRecommendations());
-      }
-      if (pathname.includes('drinks')) {
-        setDataDetails(await fetchDrinkDetails(idDaReceita));
-        setDataRecommendations(await fetchDrinksRecommendations());
-      }
-    };
-    requestDetails();
-  }, [pathname, props]);
-
-  const handleStartRecipe = () => {
-    const inProgressSaved = JSON.parse(localStorage.getItem('inProgressRecipes') || '{}');
-    const newObjInProgress = ({
-      ...inProgressSaved,
-      [objRecipe.type]: ({
-        ...inProgressSaved[pathname.split('/')[1]],
-        [objRecipe.id]: objRecipe,
-      }),
-    });
-    localStorage.setItem('inProgressRecipes', JSON.stringify(newObjInProgress));
-    setInProgress(true);
-    history.push(`${pathname}/in-progress`);
-  };
-
-  useEffect(() => {
-    checkDoneAndProgress();
-  });
-
-  useEffect(() => {
-    createObjRecipe();
-  }, [dataDetails]);
 
   return (
     <main>
@@ -153,13 +178,13 @@ export default function RecipeDetails(props) {
         (Object.keys(dataDetails).length > 0 && pathname.includes('drinks'))
           && <DrinksCard drinkDetails={ dataDetails } />
       }
-      {
-        (dataRecommendations.length > 0)
-        && <CarouselRecommendations
-          dataRecommendations={ dataRecommendations }
-          pathname={ pathname }
-        />
-      }
+      <button
+        data-testid="share-btn"
+        type="button"
+        onClick={ clickButtonShare }
+      >
+        <img src={ shareIcon } alt="icone-compartilhar" />
+      </button>
       {isDone
         ? null
         : (
@@ -173,20 +198,20 @@ export default function RecipeDetails(props) {
           </button>
         )}
       <button
-        data-testid="share-btn"
-        type="button"
-        onClick={ clickButtonShare }
-      >
-        <img src={ shareIcon } alt="icone" />
-      </button>
-      <button
         data-testid="favorite-btn"
         type="button"
         onClick={ clickButtonFavorite }
       >
-        favoritar
+        <img src={ shareIcon } alt="icone-favoritar" />
       </button>
       {messageCopy === true && <p>Link copied!</p>}
+      {
+        (dataRecommendations.length > 0)
+        && <CarouselRecommendations
+          dataRecommendations={ dataRecommendations }
+          pathname={ pathname }
+        />
+      }
     </main>
   );
 }

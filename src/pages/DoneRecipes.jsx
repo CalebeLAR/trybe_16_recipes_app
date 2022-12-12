@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
-import mockDoneRecipes from '../helpers/MockDoneRecipes';
+// import mockDoneRecipes from '../helpers/MockDoneRecipes';
 import shareIcon from '../images/shareIcon.svg';
 
 const copy = require('clipboard-copy');
@@ -25,9 +25,9 @@ export default function DoneRecipes() {
     }
   };
 
-  const clickIconShare = async () => {
+  const handleClickShare = async ({ target: { id } }) => {
     setMessageCopy(true);
-    const url = `http://localhost:3000${pathname}`;
+    const url = `http://localhost:3000${id}`;
     const messageSaved = await copy(url);
     return messageSaved;
   };
@@ -102,14 +102,17 @@ export default function DoneRecipes() {
             <p data-testid={ `${index}-horizontal-done-date` }>
               {`Finalizada em ${recipe.doneDate}`}
             </p>
-            <p data-testid={ `${index}-${recipe.tags}-horizontal-tag` }>
-              {recipe.tags}
-            </p>
+            {[...recipe.tags].map((tag) => (
+              <p key={ tag } data-testid={ `${index}-${tag}-horizontal-tag` }>
+                {tag}
+              </p>
+            ))}
             <input
               type="image"
               alt="share"
               src={ shareIcon }
-              onClick={ clickIconShare }
+              onClick={ handleClickShare }
+              id={ `/${recipe.type}s/${recipe.id}` }
               data-testid={ `${index}-horizontal-share-btn` }
             />
             {messageCopy === true && <p>Link copied!</p>}
