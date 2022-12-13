@@ -11,6 +11,7 @@ import RecipesInProgress from './pages/RecipesInProgress';
 
 export default function Router() {
   return (
+
     <Switch>
       <Route
         path="/meals/:idDaReceita/in-progress"
