@@ -14,11 +14,11 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route
-          path="/meals/:id-da-receita/in-progress"
+          path="/meals/:idDaReceita/in-progress"
           component={ RecipesInProgress }
         />
         <Route
-          path="/drinks/:id-da-receita/in-progress"
+          path="/drinks/:idDaReceita/in-progress"
           component={ RecipesInProgress }
         />
 
