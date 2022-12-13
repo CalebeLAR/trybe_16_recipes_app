@@ -30,6 +30,7 @@ export default function RecipeDetails(props) {
   const buttonStyle = {
     position: 'fixed',
     bottom: '0',
+  };
 
   const [arrIngredients, setArrIngredients] = useState([]);
   // Pega o id e o path da pagina para renderizar apenas comidas ou bebidas da página;
@@ -204,7 +205,7 @@ export default function RecipeDetails(props) {
           <button
             data-testid="start-recipe-btn"
             type="button"
-            style={ { position: 'fixed', bottom: '0' } }
+            style={ buttonStyle }
             onClick={ handleStartRecipe }
           >
             {inProgress ? 'Continue Recipe' : 'Start Recipe'}

@@ -1,9 +1,6 @@
 import React from 'react';
 import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-// import renderWithContextAndRouter from '../helpers/renderWithContextAndRouter';
-// import { act } from 'react-dom/test-utils';
-// import renderWithRouter from '../helpers/RenderWithRouter';
 
 import App from '../App';
 
@@ -17,7 +14,6 @@ import drinks from '../../cypress/mocks/drinks';
 import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
 import emptyDrinks from '../../cypress/mocks/emptyDrinks';
 import oneDrink from '../../cypress/mocks/oneDrink';
-// import Provider from '../contexts/AppRecipeProvider';
 import renderWithContextAndProvider from '../helpers/renderWithContextAndRouter';
 
 const SEARCH_ICON = 'search-top-btn';
@@ -31,14 +27,10 @@ global.alert = jest.fn();
 
 describe('Testa o componente SeachBar', () => {
   test('1) Meals', async () => {
-    // global.fetch = jest.fn(() => Promise.resolve({
-    //   json: () => Promise.resolve(meals) }));
-
     global.fetch = jest.fn((url) => Promise.resolve({
       status: 200,
       ok: true,
       json: () => {
-        console.log(url);
         if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') {
           return Promise.resolve(mealCategories);
         }
@@ -61,7 +53,7 @@ describe('Testa o componente SeachBar', () => {
       },
     }));
 
-    const { history } = renderWithContextAndProvider(<App />, '/meals');
+    renderWithContextAndProvider(<App />, '/meals');
 
     // await waitForElementToBeRemoved(screen.getByText(/assando/i));
     expect(await screen.findByText(/corba/i)).toBeInTheDocument();
@@ -130,15 +122,11 @@ describe('Testa o componente SeachBar', () => {
   test('2) Drinks', async () => {
     global.fetch = jest.fn((url) => Promise.resolve({
       json: () => {
-        console.log(url);
-
         if (url === 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list') {
-          console.log('ENTROU CATEGORIAS');
           return Promise.resolve(drinkCategories);
         }
 
         if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') {
-          console.log('ENTROU BEBIDAS');
           return Promise.resolve(drinks);
         }
 
