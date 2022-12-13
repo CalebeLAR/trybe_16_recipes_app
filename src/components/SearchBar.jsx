@@ -27,12 +27,6 @@ export default function SearchBar() {
   const switchEndpoint = () => {
     const url = getPathname();
     switch (searchRadioChecked) {
-    case 'ingredient':
-      if (url === 'meals') {
-        return `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`;
-      }
-      return `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${search}`;
-
     case 'name':
       if (url === 'meals') {
         return `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
@@ -46,7 +40,11 @@ export default function SearchBar() {
       return `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${search}`;
 
     default:
-      console.log('Ops! Something went wrong. Try again later');
+      // endpoint default: ingredients
+      if (url === 'meals') {
+        return `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`;
+      }
+      return `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${search}`;
     }
   };
 

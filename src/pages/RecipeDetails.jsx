@@ -26,6 +26,11 @@ export default function RecipeDetails(props) {
   const [isDone, setIsDone] = useState(false);
   // const [objDoneRecipe, setObjDoneRecipe] = useState({});
   const [messageCopy, setMessageCopy] = useState(false);
+
+  const buttonStyle = {
+    position: 'fixed',
+    bottom: '0',
+
   const [arrIngredients, setArrIngredients] = useState([]);
   // Pega o id e o path da pagina para renderizar apenas comidas ou bebidas da página;
   const { match: { params: { idDaReceita } } } = props;
@@ -49,12 +54,6 @@ export default function RecipeDetails(props) {
   // };
 
   const [saveFavorite, setSaveFavorite] = useState(false);
-
-  // const createObjRecipe = async () => {
-  //   const recipeDetails = pathname.includes('meals')
-  //     ? await fetchMealDetails(idDaReceita)
-  //     : await fetchDrinkDetails(idDaReceita);
-  // };
 
   const createArrIngredients = () => {
     const ingredients = Object.entries(dataDetails)

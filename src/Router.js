@@ -11,7 +11,6 @@ import RecipesInProgress from './pages/RecipesInProgress';
 
 export default function Router() {
   return (
-
     <Switch>
       <Route
         path="/meals/:idDaReceita/in-progress"
@@ -23,6 +22,7 @@ export default function Router() {
       />
 
       {/* linha 22 e 23 : so reconhece o ID se a rota for ecrita assim */}
+
       <Route path="/meals/:idDaReceita" component={ RecipeDetails } />
       <Route path="/drinks/:idDaReceita" component={ RecipeDetails } />
       <Route path="/done-recipes" component={ DoneRecipes } />
