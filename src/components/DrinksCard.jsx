@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 export default function DrinksCard({ drinkDetails }) {
   const {
@@ -30,7 +30,6 @@ export default function DrinksCard({ drinkDetails }) {
     }
   });
 
-  // console.log(allIngredientsValues);
   return (
     <main>
       <h1>DrinksCard</h1>

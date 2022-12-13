@@ -4,7 +4,13 @@ import { useHistory } from 'react-router-dom';
 import CarouselRecommendations from '../components/CarouselRecommendations';
 import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
+
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+
+const MAX = 6;
+
 const copy = require('clipboard-copy');
 import {
   fetchDrinkDetails,
@@ -21,6 +27,9 @@ export default function RecipeDetails(props) {
   const [isDone, setIsDone] = useState(false);
   const [objRecipe, setObjRecipe] = useState({});
   const [messageCopy, setMessageCopy] = useState(false);
+
+  const [saveFavorite, setSaveFavorite] = useState(false);
+
 
   const createObjRecipe = async () => {
     const { match: { params: { idDaReceita } } } = props;
@@ -45,11 +54,24 @@ export default function RecipeDetails(props) {
     );
   };
 
+
   const clickButtonShare = async () => {
     setMessageCopy(true);
     const url = `http://localhost:3000${pathname}`;
     const messageSaved = await copy(url);
     return messageSaved;
+  };
+
+  const checkIfIsFavorite = () => {
+    const savedFavorites = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    if (pathname.includes('meals')) {
+      const check = savedFavorites
+        .some((element) => element.id === dataDetails.idMeal);
+      return check;
+    }
+    const check = savedFavorites
+      .some((element) => element.id === dataDetails.idDrink);
+    return check;
   };
 
   const clickButtonFavorite = () => {
@@ -74,7 +96,16 @@ export default function RecipeDetails(props) {
         image: dataDetails.strDrinkThumb,
       };
     }
-    localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
+    if (!oldFav.find((element) => element.id === newFav.id)) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
+      setSaveFavorite(!saveFavorite);
+    } else {
+      const favoriteAvoidRepeat = oldFav.filter((element) => element.id !== newFav.id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
+      setSaveFavorite(!saveFavorite);
+    }
+
+    checkIfIsFavorite();
   };
 
   // botão "Start Recipe" -----------
@@ -117,6 +148,11 @@ export default function RecipeDetails(props) {
     requestDetails();
   }, [pathname, props]);
 
+
+  useEffect(() => {
+    checkIfIsFavorite();
+  }, []);
+
   const handleStartRecipe = () => {
     const inProgressSaved = JSON.parse(localStorage.getItem('inProgressRecipes') || '{}');
     const newObjInProgress = ({
@@ -140,6 +176,7 @@ export default function RecipeDetails(props) {
     checkDone();
   }, [dataDetails]);
 
+
   return (
     <main>
       <h1>RecipeDetails</h1>
@@ -158,6 +195,7 @@ export default function RecipeDetails(props) {
           pathname={ pathname }
         />
       }
+
       {isDone
         ? null
         : (
@@ -178,13 +216,17 @@ export default function RecipeDetails(props) {
         <img src={ shareIcon } alt="icone" />
       </button>
       <button
-        data-testid="favorite-btn"
         type="button"
         onClick={ clickButtonFavorite }
       >
-        favoritar
+        <img
+          data-testid="favorite-btn"
+          src={ checkIfIsFavorite() ? blackHeartIcon : whiteHeartIcon }
+          alt="favorite icon"
+        />
       </button>
       {messageCopy === true && <p>Link copied!</p>}
+
     </main>
   );
 }
