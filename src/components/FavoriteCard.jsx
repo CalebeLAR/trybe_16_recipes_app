@@ -7,7 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 const copy = require('clipboard-copy');
 
 const TIME_ALERT = 5000;
-export default function FavoriteCard({ filteredRecipes, setFilteredRecipes }) {
+export default function FavoriteCard({ filteredRecipes, setFilteredRecipes, filter }) {
   const [messageCopy, setMessageCopy] = useState(false);
   const onShareBtnClick = async (type, id) => {
     setMessageCopy(true);
@@ -24,11 +24,19 @@ export default function FavoriteCard({ filteredRecipes, setFilteredRecipes }) {
     localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
     setFilteredRecipes(favoriteAvoidRepeat);
   };
+  const getFilterRecipes = () => {
+    if (filter !== 'all') {
+      const recipes = filteredRecipes.filter((recipe) => recipe.type === filter);
+      return recipes;
+    }
+    const recipes = [...filteredRecipes];
+    return recipes;
+  };
 
   return (
     <section>
       {
-        filteredRecipes.map((favRecipe, index) => {
+        getFilterRecipes().map((favRecipe, index) => {
           const { type,
             name, image, category, alcoholicOrNot, nationality, id } = favRecipe;
           return (
@@ -97,4 +105,5 @@ FavoriteCard.propTypes = {
     image: PropTypes.string,
   })).isRequired,
   setFilteredRecipes: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
