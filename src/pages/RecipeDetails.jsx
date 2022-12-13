@@ -6,27 +6,47 @@ import DrinksCard from '../components/DrinksCard';
 import MealsCard from '../components/MealsCard';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
-
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-
-const MAX = 6;
-
-const copy = require('clipboard-copy');
 import {
   fetchDrinkDetails,
-  fetchDrinksRecommendations,
   fetchMealDetails,
-  fetchMealsRecommendations } from '../services/requestAPIs';
+  requestDrinks,
+  requestMeals } from '../services/requestAPIs';
+
+const MAX = 6;
+const copy = require('clipboard-copy');
 
 export default function RecipeDetails(props) {
   const { history: { location: { pathname } } } = props;
+  const page = pathname.split('/')[1];
   const history = useHistory();
-  const [dataDetails, setDataDetails] = useState(false);
+  const [dataDetails, setDataDetails] = useState({});
   const [dataRecommendations, setDataRecommendations] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const [objRecipe, setObjRecipe] = useState({});
+  // const [objDoneRecipe, setObjDoneRecipe] = useState({});
   const [messageCopy, setMessageCopy] = useState(false);
+  const [arrIngredients, setArrIngredients] = useState([]);
+  // Pega o id e o path da pagina para renderizar apenas comidas ou bebidas da página;
+  const { match: { params: { idDaReceita } } } = props;
+
+  // const createObjDoneRecipe = async () => {
+  //   setObjDoneRecipe(
+  //     {
+  //       id: idDaReceita,
+  //       type: page,
+  //       nationality: dataDetails.strArea ? dataDetails.strArea : '',
+  //       category: dataDetails.strCategory ? dataDetails.strCategory : '',
+  //       alcoholicOrNot: dataDetails.strAlcoholic ? dataDetails.strAlcoholic : '',
+  //       name: dataDetails.strMeal ? dataDetails.strMeal : dataDetails.strDrink,
+  //       image: dataDetails.strMealThumb
+  //         ? dataDetails.strMealThumb
+  //         : dataDetails.strDrinkThumb,
+  //       doneDate: '',
+  //       tags: dataDetails.strTags ? dataDetails.strTags.split(',').map((t) => t) : [],
+  //     },
+  //   );
+  // };
 
   const [saveFavorite, setSaveFavorite] = useState(false);
 
@@ -37,23 +57,28 @@ export default function RecipeDetails(props) {
       ? await fetchMealDetails(idDaReceita)
       : await fetchDrinkDetails(idDaReceita);
 
-    setObjRecipe(
-      {
-        id: idDaReceita,
-        type: pathname.split('/')[1],
-        nationality: recipeDetails.strArea ? recipeDetails.strArea : '',
-        category: recipeDetails.strCategory ? recipeDetails.strCategory : '',
-        alcoholicOrNot: recipeDetails.strAlcoholic ? recipeDetails.strAlcoholic : '',
-        name: recipeDetails.strMeal ? recipeDetails.strMeal : recipeDetails.strDrink,
-        image: recipeDetails.strMealThumb
-          ? recipeDetails.strMealThumb
-          : recipeDetails.strDrinkThumb,
-        doneDate: '',
-        tags: recipeDetails.strTags ? recipeDetails.strTags : [],
-      },
-    );
+  const createArrIngredients = () => {
+    const ingredients = Object.entries(dataDetails)
+      .filter((arr) => arr[0].includes('strIngredient')
+        && arr[1] !== ''
+        && arr[1] !== null);
+    setArrIngredients(ingredients.map((i) => i[1]));
   };
 
+  useEffect(() => {
+    // createObjDoneRecipe();
+    createArrIngredients();
+  }, [dataDetails]);
+
+  const checkDoneAndProgress = () => {
+  // botão "Start Recipe" -----------
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+    setIsDone(doneRecipes.some((recipe) => recipe.id === idDaReceita));
+
+    const inProgressRecipes = JSON.parse(localStorage
+      .getItem('inProgressRecipes')) || ({ drinks: {}, meals: {} });
+    const inProgressIds = Object.keys(inProgressRecipes[page]);
+    setInProgress(inProgressIds.some((id) => id === idDaReceita));
 
   const clickButtonShare = async () => {
     setMessageCopy(true);
@@ -74,77 +99,24 @@ export default function RecipeDetails(props) {
     return check;
   };
 
-  const clickButtonFavorite = () => {
-    const oldFav = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
-    let newFav = [];
+  useEffect(() => {
+    checkDoneAndProgress();
+  });
+
+  const requestDetails = async () => {
     if (pathname.includes('meals')) {
-      newFav = { id: dataDetails.idMeal,
-        type: 'meal',
-        nationality: dataDetails.strArea,
-        category: dataDetails.strCategory,
-        alcoholicOrNot: '',
-        name: dataDetails.strMeal,
-        image: dataDetails.strMealThumb,
-      };
-    } else {
-      newFav = { id: dataDetails.idDrink,
-        type: 'drink',
-        nationality: '',
-        category: dataDetails.strCategory,
-        alcoholicOrNot: dataDetails.strAlcoholic,
-        name: dataDetails.strDrink,
-        image: dataDetails.strDrinkThumb,
-      };
-    }
-    if (!oldFav.find((element) => element.id === newFav.id)) {
-      localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
-      setSaveFavorite(!saveFavorite);
-    } else {
-      const favoriteAvoidRepeat = oldFav.filter((element) => element.id !== newFav.id);
-      localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
-      setSaveFavorite(!saveFavorite);
-    }
-
-    checkIfIsFavorite();
-  };
-
-  // botão "Start Recipe" -----------
-  const doneRecipes = localStorage.getItem('doneRecipes');
-  const inProgressRecipes = localStorage.getItem('inProgressRecipes');
-
-  const completedRecipes = (JSON.parse(doneRecipes)) || ([]);
-  const progressRecipes = (JSON.parse(inProgressRecipes)) || ({ drinks: [], meals: [] });
-  const checkWasDone = completedRecipes.some((recipe) => pathname.includes(recipe.id));
-  const checkItProgress = (valueRecipes) => {
-    if (pathname.includes('meals')) {
-      const { meals } = valueRecipes;
-      const mealsIds = Object.keys(meals);
-      return mealsIds.some((mealId) => pathname.includes(mealId));
+      setDataDetails(await fetchMealDetails(idDaReceita));
+      const recomends = await requestDrinks();
+      setDataRecommendations(recomends.slice(0, MAX));
     }
     if (pathname.includes('drinks')) {
-      const { drinks } = valueRecipes;
-      const drinksIds = Object.keys(drinks);
-      return drinksIds.some((drinkId) => pathname.includes(drinkId));
+      setDataDetails(await fetchDrinkDetails(idDaReceita));
+      const recomends = await requestMeals();
+      setDataRecommendations(recomends.slice(0, MAX));
     }
   };
-  
-  const checkProgress = checkItProgress(progressRecipes);
-  setInProgress(checkProgress)
-  // ----------- botão "Start Recipe"
 
   useEffect(() => {
-    const requestDetails = async () => {
-    // Pega o id e o path da pagina parar renderizar apenas comidas ou bebidas da página;
-      const { match: { params: { idDaReceita } } } = props;
-      if (pathname.includes('meals')) {
-        setDataDetails(await fetchMealDetails(idDaReceita));
-        setDataRecommendations(await fetchMealsRecommendations());
-      }
-      if (pathname.includes('drinks')) {
-        setDataDetails(await fetchDrinkDetails(idDaReceita));
-        setDataRecommendations(await fetchDrinksRecommendations());
-      }
-    };
     requestDetails();
   }, [pathname, props]);
 
@@ -157,24 +129,48 @@ export default function RecipeDetails(props) {
     const inProgressSaved = JSON.parse(localStorage.getItem('inProgressRecipes') || '{}');
     const newObjInProgress = ({
       ...inProgressSaved,
-      [objRecipe.type]: ({
-        ...inProgressSaved[pathname.split('/')[1]],
-        [objRecipe.id]: objRecipe,
+      [page]: ({
+        ...inProgressSaved[page],
+        [idDaReceita]: arrIngredients,
       }),
     });
     localStorage.setItem('inProgressRecipes', JSON.stringify(newObjInProgress));
-    setInProgress(true);
+    setInProgress(true); // necessario aqui?
     history.push(`${pathname}/in-progress`);
   };
 
-  useEffect(() => {
-    checkInProgress();
-  });
+  const clickButtonShare = async () => {
+    setMessageCopy(true);
+    const url = `http://localhost:3000${pathname}`;
+    const messageSaved = await copy(url);
+    return messageSaved;
+  };
 
-  useEffect(() => {
-    createObjRecipe();
-    checkDone();
-  }, [dataDetails]);
+  const clickButtonFavorite = () => {
+    const oldFav = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const newFav = {
+      id: idDaReceita,
+      type: page,
+      nationality: dataDetails.strArea ? dataDetails.strArea : '',
+      category: dataDetails.strCategory ? dataDetails.strCategory : '',
+      alcoholicOrNot: dataDetails.strAlcoholic ? dataDetails.strAlcoholic : '',
+      name: dataDetails.strMeal ? dataDetails.strMeal : dataDetails.strDrink,
+      image: dataDetails.strMealThumb
+        ? dataDetails.strMealThumb
+        : dataDetails.strDrinkThumb,
+    };
+
+    if (!oldFav.find((element) => element.id === newFav.id)) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([...oldFav, newFav]));
+      setSaveFavorite(!saveFavorite);
+    } else {
+      const favoriteAvoidRepeat = oldFav.filter((element) => element.id !== newFav.id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify([...favoriteAvoidRepeat]));
+      setSaveFavorite(!saveFavorite);
+    }
+
+    checkIfIsFavorite();
+  };
 
 
   return (
@@ -188,32 +184,12 @@ export default function RecipeDetails(props) {
         (Object.keys(dataDetails).length > 0 && pathname.includes('drinks'))
           && <DrinksCard drinkDetails={ dataDetails } />
       }
-      {
-        (dataRecommendations.length > 0)
-        && <CarouselRecommendations
-          dataRecommendations={ dataRecommendations }
-          pathname={ pathname }
-        />
-      }
-
-      {isDone
-        ? null
-        : (
-          <button
-            data-testid="start-recipe-btn"
-            type="button"
-            style={ { position: 'fixed', bottom: '0' } }
-            onClick={ handleStartRecipe }
-          >
-            {inProgress ? 'Continue Recipe' : 'Start Recipe'}
-          </button>
-        )} 
       <button
         data-testid="share-btn"
         type="button"
         onClick={ clickButtonShare }
       >
-        <img src={ shareIcon } alt="icone" />
+        <img src={ shareIcon } alt="icone-compartilhar" />
       </button>
       <button
         type="button"
@@ -225,8 +201,26 @@ export default function RecipeDetails(props) {
           alt="favorite icon"
         />
       </button>
+      {
+        (dataRecommendations.length > 0)
+        && <CarouselRecommendations
+          dataRecommendations={ dataRecommendations }
+          pathname={ pathname }
+        />
+      }
+      {isDone
+        ? null
+        : (
+          <button
+            data-testid="start-recipe-btn"
+            type="button"
+            style={ { position: 'fixed', bottom: '0' } }
+            onClick={ handleStartRecipe }
+          >
+            {inProgress ? 'Continue Recipe' : 'Start Recipe'}
+          </button>
+        )}
       {messageCopy === true && <p>Link copied!</p>}
-
     </main>
   );
 }
