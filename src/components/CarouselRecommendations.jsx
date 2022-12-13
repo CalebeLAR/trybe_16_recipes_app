@@ -3,6 +3,7 @@ import './CarouselRecommendations.css';
 
 export default function CarouselRecommendations(props) {
   const { dataRecommendations, pathname } = props;
+  const pageMeals = pathname.includes('meals');
 
   return (
 
@@ -10,42 +11,25 @@ export default function CarouselRecommendations(props) {
       className="ContainerAll"
     >
       {
-        pathname.includes('meals')
-          ? (dataRecommendations.map((item, index) => (
-            <div
-              key={ item.strDrink }
-              data-testid={ `${index}-recommendation-card` }
+        dataRecommendations.map((item, index) => (
+          <div
+            key={ pageMeals ? item.strDrink : item.strMeal }
+            data-testid={ `${index}-recommendation-card` }
+            className="SizeImage"
+          >
+            <img
+              src={ pageMeals ? item.strDrinkThumb : item.strMealThumb }
+              alt={ pageMeals ? item.strDrink : item.strMeal }
               className="SizeImage"
+              data-testid="corrousel-image"
+            />
+            <p
+              data-testid={ `${index}-recommendation-title` }
             >
-              <img
-                src={ item.strDrinkThumb }
-                alt={ item.strDrink }
-                className="SizeImage"
-              />
-              <p
-                data-testid={ `${index}-recommendation-title` }
-              >
-                {item.strDrink}
-              </p>
-            </div>
-          ))) : (dataRecommendations.map((item, index) => (
-            <div
-              key={ item.strMeal }
-              data-testid={ `${index}-recommendation-card` }
-              className="SizeImage"
-            >
-              <img
-                src={ item.strMealThumb }
-                alt={ item.strMeal }
-                className="SizeImage"
-              />
-              <p
-                data-testid={ `${index}-recommendation-title` }
-              >
-                {item.strMeal}
-              </p>
-            </div>
-          )))
+              {pageMeals ? item.strDrink : item.strMeal}
+            </p>
+          </div>
+        ))
       }
 
     </div>

@@ -25,7 +25,7 @@ export default function Header() {
   return (
     <div>
       <div className="bar">
-        <p data-testid="page-title">
+        <p>
           app
           <strong>receitas</strong>
         </p>

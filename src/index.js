@@ -7,7 +7,11 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
-  .render(<BrowserRouter><App /></BrowserRouter>);
+  .render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+  );
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -76,6 +76,12 @@ export default function MealsCard({ mealDetails }) {
         />
       </div>
       <div>
+        <img
+          data-testid="recipe-photo"
+          src={ strMealThumb }
+          alt={ strMeal }
+          style={ { width: '100px' } }
+        />
         <h3 data-testid="recipe-title">{strMeal}</h3>
         <p data-testid="recipe-category">{strCategory}</p>
       </div>

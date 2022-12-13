@@ -13,8 +13,8 @@ export default function Login() {
   };
 
   const submitLogin = () => {
-    history.push('/meals');
     localStorage.setItem('user', JSON.stringify({ email: `${email}` }));
+    history.push('/meals');
   };
 
   return (

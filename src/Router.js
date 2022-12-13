@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import Login from './pages/Login';
@@ -11,7 +11,6 @@ import RecipesInProgress from './pages/RecipesInProgress';
 
 export default function Router() {
   return (
-    // <BrowserRouter>
     <Switch>
       <Route
         path="/meals/:idDaReceita/in-progress"
@@ -22,7 +21,8 @@ export default function Router() {
         component={ RecipesInProgress }
       />
 
-      {/* linha 22 e 23 : so reconhece o ID se a rota for escrita assim */}
+      {/* linha 22 e 23 : so reconhece o ID se a rota for ecrita assim */}
+
       <Route path="/meals/:idDaReceita" component={ RecipeDetails } />
       <Route path="/drinks/:idDaReceita" component={ RecipeDetails } />
       <Route path="/done-recipes" component={ DoneRecipes } />
@@ -33,6 +33,5 @@ export default function Router() {
       <Route exact path="/" component={ Login } />
       <Route path="*" component={ NotFound } />
     </Switch>
-    // </BrowserRouter>
   );
 }
