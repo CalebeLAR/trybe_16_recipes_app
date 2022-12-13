@@ -50,12 +50,11 @@ export default function RecipeDetails(props) {
 
   const [saveFavorite, setSaveFavorite] = useState(false);
 
-
-  const createObjRecipe = async () => {
-    const { match: { params: { idDaReceita } } } = props;
-    const recipeDetails = pathname.includes('meals')
-      ? await fetchMealDetails(idDaReceita)
-      : await fetchDrinkDetails(idDaReceita);
+  // const createObjRecipe = async () => {
+  //   const recipeDetails = pathname.includes('meals')
+  //     ? await fetchMealDetails(idDaReceita)
+  //     : await fetchDrinkDetails(idDaReceita);
+  // };
 
   const createArrIngredients = () => {
     const ingredients = Object.entries(dataDetails)
@@ -79,6 +78,7 @@ export default function RecipeDetails(props) {
       .getItem('inProgressRecipes')) || ({ drinks: {}, meals: {} });
     const inProgressIds = Object.keys(inProgressRecipes[page]);
     setInProgress(inProgressIds.some((id) => id === idDaReceita));
+  };
 
   const clickButtonShare = async () => {
     setMessageCopy(true);
@@ -120,7 +120,6 @@ export default function RecipeDetails(props) {
     requestDetails();
   }, [pathname, props]);
 
-
   useEffect(() => {
     checkIfIsFavorite();
   }, []);
@@ -139,18 +138,11 @@ export default function RecipeDetails(props) {
     history.push(`${pathname}/in-progress`);
   };
 
-  const clickButtonShare = async () => {
-    setMessageCopy(true);
-    const url = `http://localhost:3000${pathname}`;
-    const messageSaved = await copy(url);
-    return messageSaved;
-  };
-
   const clickButtonFavorite = () => {
     const oldFav = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     const newFav = {
       id: idDaReceita,
-      type: page,
+      type: page.replace('s', ''),
       nationality: dataDetails.strArea ? dataDetails.strArea : '',
       category: dataDetails.strCategory ? dataDetails.strCategory : '',
       alcoholicOrNot: dataDetails.strAlcoholic ? dataDetails.strAlcoholic : '',
@@ -171,7 +163,6 @@ export default function RecipeDetails(props) {
 
     checkIfIsFavorite();
   };
-
 
   return (
     <main>
