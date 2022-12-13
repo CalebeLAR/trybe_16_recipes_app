@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import FavoriteButtons from './FavoriteButtons';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
+import FavoriteButtons from './FavoriteButtons';
 
 const copy = require('clipboard-copy');
 
@@ -41,34 +42,38 @@ export default function FavoriteCard({ filteredRecipes, setFilteredRecipes, filt
             name, image, category, alcoholicOrNot, nationality, id } = favRecipe;
           return (
             <div key={ name }>
-              <img
-                data-testid={ `${index}-horizontal-image` }
-                src={ image }
-                alt={ name }
-                width={ 200 }
-              />
-              <div>
-                <p
-                  data-testid={ `${index}-horizontal-name` }
-                >
-                  {name}
-                </p>
-                {
-                  (type === 'meal') ? (
-                    <p
-                      data-testid={ `${index}-horizontal-top-text` }
-                    >
-                      {`${nationality} - ${category}`}
-                    </p>
-                  ) : (
-                    <p
-                      data-testid={ `${index}-horizontal-top-text` }
-                    >
-                      {alcoholicOrNot}
-                    </p>
-                  )
-                }
-              </div>
+              <Link to={ `/${type}s/${id}` }>
+
+                <img
+                  data-testid={ `${index}-horizontal-image` }
+                  src={ image }
+                  alt={ name }
+                  width={ 200 }
+                />
+                <div>
+                  <p
+                    data-testid={ `${index}-horizontal-name` }
+                  >
+                    {name}
+                  </p>
+
+                  {
+                    (type === 'meal') ? (
+                      <p
+                        data-testid={ `${index}-horizontal-top-text` }
+                      >
+                        {`${nationality} - ${category}`}
+                      </p>
+                    ) : (
+                      <p
+                        data-testid={ `${index}-horizontal-top-text` }
+                      >
+                        {alcoholicOrNot}
+                      </p>
+                    )
+                  }
+                </div>
+              </Link>
               <div>
                 <FavoriteButtons
                   dataTestid={ `${index}-horizontal-share-btn` }
