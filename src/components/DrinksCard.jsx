@@ -34,7 +34,12 @@ export default function DrinksCard({ drinkDetails }) {
     <main>
       <h1>DrinksCard</h1>
       <div>
-        <img data-testid="recipe-photo" src={ strDrinkThumb } alt={ strDrink } />
+        <img
+          data-testid="recipe-photo"
+          src={ strDrinkThumb }
+          alt={ strDrink }
+          style={ { width: '100px' } }
+        />
         <h3 data-testid="recipe-title">{strDrink}</h3>
         <p data-testid="recipe-category">{strAlcoholic}</p>
       </div>

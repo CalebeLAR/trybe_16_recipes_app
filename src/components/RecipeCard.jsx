@@ -6,6 +6,7 @@ import Loading from './Loading';
 export default function RecipeCard() {
   const {
     loading,
+    // setLoading,
     arrMealAPI,
     arrDrinkAPI,
     arrMealCategAPI,
@@ -43,14 +44,12 @@ export default function RecipeCard() {
   };
 
   const handleClickFilter = async ({ target }) => {
-    const search = target.innerText;
-    if (search === objFilter.filter) {
+    const search = target.innerHTML;
+    if (search === objFilter.filter || search === 'All') {
       setObjFilter(objFilterInitial);
-    } else if (search !== 'All') {
+    } else {
       const newData = await fetchByFilter(search);
       setObjFilter({ arrRecipes: newData, filter: search });
-    } else {
-      setObjFilter(objFilterInitial);
     }
   };
 
