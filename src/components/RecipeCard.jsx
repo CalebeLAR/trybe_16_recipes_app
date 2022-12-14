@@ -46,8 +46,8 @@ export default function RecipeCard() {
     }
   };
 
-  const handleClickFilter = async ({ target }) => {
-    const search = target.innerHTML;
+  const handleClickFilter = async (categ) => {
+    const search = categ;
     if (search === objFilter.filter || search === 'All') {
       setObjFilter(objFilterInitial);
     } else {
@@ -78,7 +78,7 @@ export default function RecipeCard() {
                 className={ styles.categories__buttons }
                 type="button"
                 data-testid={ `${categ}-category-filter` }
-                onClick={ handleClickFilter }
+                onClick={ () => handleClickFilter(categ) }
               >
                 {page === 'meals'
                   ? <TbMeat className={ styles.categories__icon } />
@@ -95,7 +95,7 @@ export default function RecipeCard() {
         className={ styles.all_button }
         type="button"
         data-testid="All-category-filter"
-        onClick={ handleClickFilter }
+        onClick={ () => handleClickFilter('All') }
       >
         Show All
       </button>
