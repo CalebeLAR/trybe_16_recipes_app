@@ -1,0 +1,89 @@
+.search {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* height: 0; */
+  opacity: 0;
+}
+
+.search__input, .search__button {
+  border: 0;
+  border-radius: 5px;
+  height: 2.5rem;
+  margin-bottom: 0.685rem;
+
+  /* background: var(--accent-500); */
+  outline: 1px solid var(--accent-500);
+  padding-inline: 1rem;
+  width: 17.187rem;
+}
+
+.search__input:focus {
+  outline: 2px solid var(--accent-500);
+}
+
+.search__input::placeholder {
+  color: var(--white);
+}
+
+.radio_buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 1rem;
+  margin-left: 3px;
+}
+
+.radio_buttons__item {
+  margin-left: 1rem;
+  position: relative;
+}
+
+.radio_buttons__item:before {
+  border: 2px solid red;
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 16px;
+  left: -20px;
+  position: absolute;
+  top: 1px;
+  width: 16px;
+}
+
+.radio_buttons__item input {
+  display: none;
+}
+
+.radio_buttons__item:after {
+  background-color: var(--accent-500);
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 8px;
+  left: -16px;
+  opacity: 0;
+  position: absolute;
+  top: 5px;
+  transition: all 0.5s;
+  width: 8px;
+}
+
+.radio_buttons__item:has( input:checked ):after {
+  display: block;
+  opacity: 1;
+}
+
+.search__button {
+  background: var(--accent-500);
+  color: var(--white);
+  font-weight: 700;
+}
+
+
+.show {
+  margin-top: 1.875rem;
+  opacity: 1;
+  transition: all 0.5s ease;
+}

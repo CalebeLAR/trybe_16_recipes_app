@@ -1,0 +1,63 @@
+/* Variables */
+:root {
+
+  --white: white;
+
+  --grey-200: #e9e9e9;
+
+  --accent-800: #491b0b;
+
+  --accent-700: #992900;
+
+  --accent-500: #ff4600;
+
+  --accent-200: #ffddd2;
+
+  --color: rgb(29, 10, 10);
+}
+
+
+/* Reset */
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+  padding-inline: 1.25rem;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+body, input, button {
+  color: var(--color);
+  font-family: Figtree , sans-serif;
+  font-weight: 500;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.1;
+  margin-top: 0;
+}
+
+p {
+  margin-top: 0;
+}
+
+a, a:visited, a:active {
+  color: var(--color);
+  text-decoration: none;
+}
+
+ul {
+  margin-bottom: 2.5rem;
+  padding-left: 18px;
+}
+

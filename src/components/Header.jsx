@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { MagnifyingGlass, User } from 'phosphor-react';
 import SearchBar from './SearchBar';
-import searchIcon from '../images/searchIcon.svg';
-import profileIcon from '../images/profileIcon.svg';
-import './Header.css';
+// import searchIcon from '../images/searchIcon.svg';
+// import profileIcon from '../images/profileIcon.svg';
+import styles from './Header.module.css';
 
 export default function Header() {
   const location = useLocation();
@@ -24,35 +25,46 @@ export default function Header() {
 
   return (
     <div>
-      <div className="bar">
-        <p>
+      <div className={ styles.bar }>
+        <p className={ styles.bar__logo }>
           app
-          <strong>receitas</strong>
+          <span className={ styles.bar__logo__accent }>receitas</span>
         </p>
 
-        <div className="bar__icons">
+        <div className={ styles.bar__icons }>
           {/* Verifica a rota da página e retorna os icones adequados  */}
           {location.pathname === '/meals'
             || location.pathname === '/drinks'
             ? (
-              <input
-                data-testid="search-top-btn"
-                type="image"
-                // className="bar__search-button"
-                src={ searchIcon }
-                alt="search icon"
-                onClick={ () => setIsSearchOpen(!isSearchOpen) }
-              />
-
+              <>
+                <MagnifyingGlass
+                  size={ 21 }
+                  weight="bold"
+                  onClick={ () => setIsSearchOpen(!isSearchOpen) }
+                  alt="search icon"
+                />
+                {/* <input
+                  className={ styles.bar__search_button }
+                  data-testid="search-top-btn"
+                  type="image"
+                  src={ searchIcon }
+                  alt="search icon"
+                  onClick={ () => setIsSearchOpen(!isSearchOpen) }
+                /> */}
+              </>
             )
             : null}
 
           <Link to="/profile">
-            <img
+            <User
+              size={ 22 }
+              weight="bold"
+            />
+            {/* <img
               data-testid="profile-top-btn"
               src={ profileIcon }
               alt="profile icon"
-            />
+            /> */}
           </Link>
         </div>
       </div>
@@ -60,7 +72,7 @@ export default function Header() {
       {isSearchOpen && <SearchBar />}
 
       <div>
-        <p data-testid="page-title">
+        <p data-testid="page-title" className={ styles.page_title }>
           <strong>
             {formatPathname(location.pathname)}
           </strong>

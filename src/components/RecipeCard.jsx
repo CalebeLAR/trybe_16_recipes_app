@@ -1,7 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { } from 'phosphor-react';
+import { TbMeat, TbCup } from 'react-icons/tb';
 import AppRecipeContext from '../contexts/AppRecipeContext';
 import Loading from './Loading';
+import styles from './RecipeCard.module.css';
 
 export default function RecipeCard() {
   const {
@@ -61,52 +64,83 @@ export default function RecipeCard() {
 
   if (loading) return <Loading />;
   return (
-    <div>
-      {(page === 'meals'
-        ? arrMealCategAPI
-        : arrDrinkCategAPI)
-        .map((categ, i) => (
-          <div key={ i }>
-            <button
-              type="button"
-              data-testid={ `${categ}-category-filter` }
-              onClick={ handleClickFilter }
+    <div className={ styles.container }>
+      <div className={ styles.categories }>
+        {(page === 'meals'
+          ? arrMealCategAPI
+          : arrDrinkCategAPI
+        )
+          .map((categ, i) => (
+            <div
+              key={ i }
             >
-              { categ }
-            </button>
-          </div>
-        ))}
+              <button
+                className={ styles.categories__buttons }
+                type="button"
+                data-testid={ `${categ}-category-filter` }
+                onClick={ handleClickFilter }
+              >
+                {page === 'meals'
+                  ? <TbMeat className={ styles.categories__icon } />
+                  : <TbCup className={ styles.categories__icon } />}
+                <br />
+                { categ.split(' ')[0] }
+              </button>
+
+            </div>
+
+          ))}
+      </div>
       <button
+        className={ styles.all_button }
         type="button"
         data-testid="All-category-filter"
         onClick={ handleClickFilter }
       >
-        All
+        Show All
       </button>
       {page === 'meals'
         ? objFilter.arrRecipes.map((recipe, index) => (
           <Link to={ `/meals/${recipe.idMeal}` } key={ index }>
-            <div data-testid={ `${index}-recipe-card` }>
-              <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
+            <div
+              data-testid={ `${index}-recipe-card` }
+              className={ styles.recipe }
+            >
               <img
-                style={ { width: '100px' } }
+                className={ styles.recipe__image }
                 src={ recipe.strMealThumb }
                 alt={ recipe.strMeal }
                 data-testid={ `${index}-card-img` }
               />
+              <p
+                data-testid={ `${index}-card-name` }
+                className={ styles.recipe__name }
+              >
+                {recipe.strMeal}
+
+              </p>
             </div>
           </Link>
         ))
         : objFilter.arrRecipes.map((recipe, index) => (
           <Link to={ `/drinks/${recipe.idDrink}` } key={ index }>
-            <div data-testid={ `${index}-recipe-card` }>
-              <p data-testid={ `${index}-card-name` }>{recipe.strDrink}</p>
+            <div
+              data-testid={ `${index}-recipe-card` }
+              className={ styles.recipe }
+            >
               <img
-                style={ { width: '100px' } }
+                className={ styles.recipe__image }
                 src={ recipe.strDrinkThumb }
                 alt={ recipe.strDrink }
                 data-testid={ `${index}-card-img` }
               />
+              <p
+                data-testid={ `${index}-card-name` }
+                className={ styles.recipe__name }
+              >
+                {recipe.strDrink}
+
+              </p>
             </div>
           </Link>
         ))}

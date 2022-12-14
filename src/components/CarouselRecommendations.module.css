@@ -1,0 +1,19 @@
+.ContainerAll {
+  display: flex;
+  flex-direction: row;
+  font-weight: 700;
+  gap: 15px;
+  height: 160px;
+  overflow: auto;
+  width: 100%;
+}
+
+.SizeImage {
+  border-radius: 12px;
+  width: 100px;
+}
+
+.recipe__auxs {
+  color: var(--accent-500);
+  font-weight: 700;
+}

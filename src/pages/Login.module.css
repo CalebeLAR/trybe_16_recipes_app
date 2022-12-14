@@ -1,0 +1,54 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100vh;
+  justify-content: end;
+
+  /* margin-top: -3.75rem; */
+}
+
+.container > label {
+  position: relative;
+}
+
+.input, .button {
+  border: 0;
+  border-radius: 0.25rem;
+  height: 2.5rem;
+  width: 15.625rem;
+}
+
+.input {
+  background: var(--grey-200);
+  outline-color: var(--accent-500);
+  outline-offset: -1px;
+  padding-inline: 1rem;
+}
+
+.button {
+  background: var(--accent-500);
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 50px;
+  margin-top: 200px;
+  transition: all 0.2s;
+}
+
+.button:disabled {
+  background: var(--accent-200);
+  color: var(--white);
+  cursor: not-allowed;
+}
+
+.pass__eye {
+  background: rgb(146, 146, 146);
+  border-radius: 4px;
+  height: 29px;
+  padding: 5px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  width: 29px;
+}

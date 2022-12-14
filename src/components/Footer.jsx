@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ForkKnife, Martini } from 'phosphor-react';
 import AppRecipeContext from '../contexts/AppRecipeContext';
-import drink from '../images/drinkIcon.svg';
+// import drink from '../images/drinkIcon.svg';
 import food from '../images/mealIcon.svg';
-import './Footer.css';
+import styles from './Footer.module.css';
 
 export default function Footer() {
   const history = useHistory();
@@ -15,22 +16,34 @@ export default function Footer() {
   };
 
   return (
-    <div data-testid="footer" className="bar__footer">
+    <div data-testid="footer" className={ styles.bar__footer }>
 
-      <input
+      {/* <input
         type="image"
         alt="drinks"
         src={ drink }
         onClick={ () => redirect('/drinks') }
         data-testid="drinks-bottom-btn"
+      /> */}
+      <ForkKnife
+        size={ 26 }
+        color="#ffddd2"
+        weight="bold"
+        onClick={ () => redirect('/meals') }
       />
 
-      <input
+      {/* <input
         type="image"
         alt="meals"
         src={ food }
         onClick={ () => redirect('/meals') }
         data-testid="meals-bottom-btn"
+      /> */}
+      <Martini
+        size={ 26 }
+        color="#ffddd2"
+        weight="bold"
+        onClick={ () => redirect('/drinks') }
       />
 
     </div>

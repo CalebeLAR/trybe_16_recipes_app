@@ -1,38 +1,41 @@
 import PropTypes from 'prop-types';
-import './CarouselRecommendations.css';
+import styles from './CarouselRecommendations.module.css';
 
 export default function CarouselRecommendations(props) {
   const { dataRecommendations, pathname } = props;
   const pageMeals = pathname.includes('meals');
 
   return (
+    <>
+      <p className={ styles.recipe__auxs }> Recommendations:</p>
+      <div
+        className={ styles.ContainerAll }
+      >
 
-    <div
-      className="ContainerAll"
-    >
-      {
-        dataRecommendations.map((item, index) => (
-          <div
-            key={ pageMeals ? item.strDrink : item.strMeal }
-            data-testid={ `${index}-recommendation-card` }
-            className="SizeImage"
-          >
-            <img
-              src={ pageMeals ? item.strDrinkThumb : item.strMealThumb }
-              alt={ pageMeals ? item.strDrink : item.strMeal }
-              className="SizeImage"
-              data-testid="corrousel-image"
-            />
-            <p
-              data-testid={ `${index}-recommendation-title` }
+        {
+          dataRecommendations.map((item, index) => (
+            <div
+              key={ pageMeals ? item.strDrink : item.strMeal }
+              data-testid={ `${index}-recommendation-card` }
+              className={ styles.SizeImage }
             >
-              {pageMeals ? item.strDrink : item.strMeal}
-            </p>
-          </div>
-        ))
-      }
+              <img
+                src={ pageMeals ? item.strDrinkThumb : item.strMealThumb }
+                alt={ pageMeals ? item.strDrink : item.strMeal }
+                className={ styles.SizeImage }
+                data-testid="corrousel-image"
+              />
+              <p
+                data-testid={ `${index}-recommendation-title` }
+              >
+                {pageMeals ? item.strDrink : item.strMeal}
+              </p>
+            </div>
+          ))
+        }
 
-    </div>
+      </div>
+    </>
 
   );
 }

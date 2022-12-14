@@ -1,15 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import AppRecipeContext from '../contexts/AppRecipeContext';
+import styles from './SearchBar.module.css';
 
 const twelve = 12;
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const [searchRadioChecked, setSearchRadioChecked] = useState('ingredient');
   const [search, setSearch] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
   const context = useContext(AppRecipeContext);
   const location = useLocation();
   const history = useHistory();
+
+  const { isShow } = props;
 
   const showAlert = (error) => {
     const print = {
@@ -96,18 +100,24 @@ export default function SearchBar() {
     context.setLoading(false);
   };
 
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
-    <div className="search">
+    <div className={ isVisible ? `${styles.search} ${styles.show}` : styles.search }>
       <input
         data-testid="search-input"
+        className={ styles.search__input }
         type="search"
         placeholder="Search"
         value={ search }
         onChange={ handleSearch }
       />
 
-      <div>
-        <label htmlFor="ingredient">
+      <div className={ styles.radio_buttons }>
+
+        <label htmlFor="ingredient" className={ styles.radio_buttons__item }>
           <input
             data-testid="ingredient-search-radio"
             type="radio"
@@ -120,7 +130,7 @@ export default function SearchBar() {
           Ingredient
         </label>
 
-        <label htmlFor="name">
+        <label htmlFor="name" className={ styles.radio_buttons__item }>
           <input
             data-testid="name-search-radio"
             type="radio"
@@ -133,7 +143,7 @@ export default function SearchBar() {
           Name
         </label>
 
-        <label htmlFor="firstLetter">
+        <label htmlFor="firstLetter" className={ styles.radio_buttons__item }>
           <input
             data-testid="first-letter-search-radio"
             type="radio"
@@ -148,11 +158,12 @@ export default function SearchBar() {
       </div>
 
       <button
+        className={ styles.search__button }
         data-testid="exec-search-btn"
         type="button"
         onClick={ getResults }
       >
-        SEARCH
+        Search Recipe
 
       </button>
     </div>

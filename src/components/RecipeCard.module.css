@@ -1,0 +1,79 @@
+.container {
+  margin-bottom: 110px;
+}
+
+.categories {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr;
+  margin-bottom: 0.625rem;
+}
+
+.categories__buttons, .all_button {
+  background: var(--accent-500);
+  border: 0;
+  border-radius: 6px;
+  color: white;
+
+}
+
+.categories__buttons {
+  font-size: 0.625rem;
+  padding: 5px;
+  width: 100%
+
+  /* height: 45px; */
+}
+
+.categories__icon {
+  color: white;
+  display: inline-block;
+  font-size: 1.25rem;
+}
+
+.all_button {
+  font-weight: 700;
+  height: 2.5rem;
+  margin-bottom: 3.75rem;
+  width: 100%;
+}
+
+.recipe {
+  border-radius: 15px;
+  height: 11.25rem;
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.recipe:before {
+  background: linear-gradient(to bottom left, rgba(255, 255, 255, 0), 70%, crimson);
+  content: '';
+  display: block;
+  height: 100%;
+  opacity: 0.25;
+  position: absolute;
+  width: 100%;
+}
+
+.recipe__image {
+  width: 100%;
+}
+
+.recipe__name {
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.5);
+  bottom: 0;
+  box-shadow: 0 -8px 32px 0 rgba(31, 38, 135, 0.37);
+  color: black;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 700;
+  left: 0;
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  position: absolute;
+  width: 100%;
+}
+

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Eye, Heart, Horse } from 'phosphor-react';
+import styles from './Login.module.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -19,32 +21,45 @@ export default function Login() {
 
   return (
     <div>
-      <label htmlFor="email">
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          data-testid="email-input"
-          onChange={ (e) => setEmail(e.target.value) }
-        />
-      </label>
-      <label htmlFor="password">
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
-          data-testid="password-input"
-          onChange={ (e) => setPassword(e.target.value) }
-        />
-      </label>
-      <button
-        type="button"
-        data-testid="login-submit-btn"
-        disabled={ buttonValid() }
-        onClick={ submitLogin }
-      >
-        Login
-      </button>
+      <div className={ styles.container }>
+        <p>
+          app
+          <strong>receitas</strong>
+        </p>
+        <label htmlFor="email">
+          <input
+            className={ styles.input }
+            type="email"
+            placeholder="Email"
+            name="email"
+            data-testid="email-input"
+            onChange={ (e) => setEmail(e.target.value) }
+          />
+        </label>
+
+        <label htmlFor="password">
+          <input
+            className={ styles.input }
+            type="password"
+            placeholder="Password"
+            name="password"
+            data-testid="password-input"
+            onChange={ (e) => setPassword(e.target.value) }
+          />
+          <Eye color="white" weight="bold" className={ styles.pass__eye } />
+        </label>
+
+        <button
+          className={ styles.button }
+          type="button"
+          data-testid="login-submit-btn"
+          disabled={ buttonValid() }
+          onClick={ submitLogin }
+        >
+          Sign In
+        </button>
+      </div>
+
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Heart, ShareNetwork } from 'phosphor-react';
+import styles from './MealsCard.module.css';
 
 export default function MealsCard({ mealDetails }) {
   const { strMealThumb, strMeal, strCategory, strInstructions, strYoutube } = mealDetails;
@@ -61,31 +63,39 @@ export default function MealsCard({ mealDetails }) {
 
   return (
     <main>
-      <h1>MealsCard</h1>
-      <img data-testid="recipe-photo" src={ strMealThumb } alt={ strMeal } />
-      <div>
-        <input
-          data-testid="favorite-btn"
-          type="button"
-          value="Favorite"
-        />
-        <input
-          data-testid="share-btn"
-          type="button"
-          value="Share"
-        />
-      </div>
-      <div>
+      {/* <h1>MealsCard</h1> */}
+      <div className={ styles.recipe__container }>
         <img
           data-testid="recipe-photo"
           src={ strMealThumb }
           alt={ strMeal }
-          style={ { width: '100px' } }
+          className={ styles.recipe__image }
         />
-        <h3 data-testid="recipe-title">{strMeal}</h3>
+
         <p data-testid="recipe-category">{strCategory}</p>
+        {/* <img
+          data-testid="recipe-photo"
+          src={ strMealThumb }
+          alt={ strMeal }
+          style={ { width: '100px' } }
+        /> */}
+        <div className={ styles.recipe__infobox }>
+          <h3
+            className={ styles.infobox__name }
+            data-testid="recipe-title"
+          >
+            {strMeal}
+
+          </h3>
+          <div className={ styles.infobox__icons }>
+            <ShareNetwork size={ 22 } color="#992900" weight="fill" />
+            <Heart size={ 24 } color="#992900" weight="fill" />
+          </div>
+        </div>
+
       </div>
       <section>
+        <p className={ styles.recipe__auxs }>Ingredients:</p>
         <ul>
           {
             ingredients.map((ingredient, index) => (
@@ -132,8 +142,10 @@ export default function MealsCard({ mealDetails }) {
         </ul>
       </section>
       <div data-testid="instructions">
-        <p>{strInstructions}</p>
+        <p className={ styles.recipe__auxs }>Instructions:</p>
+        <p className={ styles.recipe__instructions }>{strInstructions}</p>
       </div>
+
       <iframe
         width="560"
         height="315"
@@ -147,7 +159,9 @@ export default function MealsCard({ mealDetails }) {
         gyroscope;
         picture-in-picture"
         allowFullScreen
+        className={ styles.recipe__video }
       />
+
       {/* <iframe
         title={ strMeal }
         data-testid="video"

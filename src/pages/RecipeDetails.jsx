@@ -12,6 +12,7 @@ import {
   fetchMealDetails,
   requestDrinks,
   requestMeals } from '../services/requestAPIs';
+import styles from './RecipeDetails.module.css';
 
 const MAX = 6;
 const copy = require('clipboard-copy');
@@ -166,7 +167,7 @@ export default function RecipeDetails(props) {
 
   return (
     <main>
-      <h1>RecipeDetails</h1>
+      {/* <h1>RecipeDetails</h1> */}
       {
         (Object.keys(dataDetails).length > 0 && pathname.includes('meals'))
           && <MealsCard mealDetails={ dataDetails } />
