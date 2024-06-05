@@ -25,7 +25,7 @@ Memo de habilidades:
     npm install  
 ```
 
-**3. Inicie a plicação.**  
+**3. Inicie a plicação**  
 ```shell
     npm start 
 ```
