@@ -17,7 +17,7 @@ Memo de habilidades:
 ## Como executar  
 **1. Clone o repositório**  
 ```shell
-    git clone git@github.com:CalebeLAR/tryproject-16-recipes-app.git 
+    git clone git@github.com:CalebeLAR/trybe_16_recipes_app.git
 ```
 
 **2. Instale as dependências**  
